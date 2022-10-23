@@ -1,0 +1,24 @@
+---
+database:
+  host: localhost
+  type: mariadb
+  user: lucent
+  schema: lucent
+  socket: /var/run/mysqld/mysqld.sock
+
+data dir:
+  path: /usr/local/var/lucent
+
+logging:
+  log level: 20
+  log dir: /usr/local/var/lucent/log/
+  max size: 20  # In bytes.
+  backups to keep: 5
+  format: "%(asctime)s:%(name)s:%(levelname)s:%(message)s"
+
+date and time:
+  format: "%Y.%m.%d %H:%m:%S"
+
+include:
+    -
+        ./conf/tables.yaml
