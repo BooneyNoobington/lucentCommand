@@ -1,8 +1,8 @@
 # Connection has to include the correct keywords.
 database_connection <- function(config){
 
-    library(RMariaDB)  # Connect to a MariaDB.
-    library(DBI)
+    source("./R/helpers.r")  # Functions for smaller problems.
+    ready_packages(c("RMariaDB", "DBI"))  # Connect to a MariaDB.
 
     sql_connection <- RMariaDB::dbConnect(
         MariaDB()  # Driver definition.
@@ -23,16 +23,19 @@ database_connection <- function(config){
 # Transform a saved query into an executable string.
 create_query_string <- function(file.path, replacements.list){
 
-    library(readr)  # Read a simple text file.
-    library(stringr)  # Replace strings inside another string.
+    source("./R/helpers.r")  # Functions for smaller problems.
+    ready_packages(c("readr"))
 
     # First open the file as is.
     query.raw <- readr::read_file(file.path)
 
     # Then remove all newlines. They might cause problems when executing the query.
+    query.string <- gsub("\\n", " ", query.string)
 
-    query.string <- gsub(query.string, "[\n]", " ")
-
+    # Also remove all occurences in the replacements.list.
+    for (r in names(replacements.list)){
+        query.string <- gsub(replacements.list[[r]], r, query.string)
+    }
 
     return(query.string)
 

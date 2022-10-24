@@ -1,8 +1,7 @@
 #!/bin/env Rscript
 
-library(yaml)
-
-setwd("/opt/lucent")
+source("./R/helpers.r")
+ready_packages(c("yaml"))
 
 # Load configuration file.
 # No need to recurse if the database information is not in an included file.
@@ -13,6 +12,6 @@ source("./R/sql_interop.r")
 
 sql_connection <- database_connection(config)
 
-query <- create_query_string("./sql/GET_PERSON.SQL", list(reciever = "Markus"))
+query <- create_query_string("./sql/GET_PERSON.SQL", list("{reciever}" = "Markus"))
 
 print(query)
