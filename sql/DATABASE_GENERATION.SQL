@@ -41,6 +41,32 @@ CREATE OR REPLACE TABLE `event`
   , concerning_table VARCHAR(50)
 );
 
+CREATE OR REPLACE TABLE `organisation`
+(
+    id_organisation INTEGER PRIMARY KEY NOT NULL
+  , identifier VARCHAR(50) UNIQUE
+  , short_identifier VARCHAR(15)
+);
+
+CREATE OR REPLACE TABLE `person`
+(
+    id_person INTEGER PRIMARY KEY UNIQUE NOT NULL
+  , id_address INTEGER REFERENCES `address` (id_address)
+  , id_organisation INTEGER REFERENCES `organisation` (id_organisation)
+  , given_name VARCHAR(50) NOT NULL
+  , surname VARCHAR(50) NOT NULL
+  , unix_account VARCHAR(50) UNIQUE
+);
+
+CREATE OR REPLACE TABLE `message`
+(
+    id_message INTEGER PRIMARY KEY UNIQUE NOT NULL
+  , sender VARCHAR(20) NOT NULL REFERENCES `person` (unix_account)
+  , reciever VARCHAR(20) NOT NULL REFERENCES `person` (unix_account)
+  , subject VARCHAR(250) NOT NULL
+  , message VARCHAR(500) NOT NULL
+  , read_status BOOLEAN NOT NULL DEFAULT 0
+);
 
 
 -- Series 1: procedures.
@@ -461,31 +487,3 @@ CREATE OR REPLACE VIEW `sample_procedure` AS
                     ON  p.id_procedure = r.id_procedure
 ;
 
---- Series 4: Organisation.
-
-CREATE OR REPLACE TABLE `organisation`
-(
-    id_organisation INTEGER PRIMARY KEY NOT NULL
-  , identifier VARCHAR(50) UNIQUE
-  , short_identifier VARCHAR(15)
-);
-
-CREATE OR REPLACE TABLE `person`
-(
-    id_person INTEGER PRIMARY KEY UNIQUE NOT NULL
-  , id_address INTEGER REFERENCES `address` (id_address)
-  , id_organisation INTEGER REFERENCES `organisation` (id_organisation)
-  , given_name VARCHAR(50) NOT NULL
-  , surname VARCHAR(50) NOT NULL
-  , unix_account VARCHAR(50) UNIQUE
-);
-
-CREATE OR REPLACE TABLE `message`
-(
-    id_message INTEGER PRIMARY KEY UNIQUE NOT NULL
-  , sender VARCHAR(20) NOT NULL REFERENCES `person` (unix_account)
-  , reciever VARCHAR(20) NOT NULL REFERENCES `person` (unix_account)
-  , subject VARCHAR(250) NOT NULL
-  , message VARCHAR(500) NOT NULL
-  , read_status BOOLEAN NOT NULL DEFAULT 0
-);

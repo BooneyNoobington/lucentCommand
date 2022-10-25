@@ -68,8 +68,8 @@
 
 %%% The "real" document content comes below...
 
-\title{lucentLIMS}
-\subtitle{Ein transparentes System}
+\title{Bedienungsanleitung}
+\subtitle{lucentLIMS 1.0}
 \author{Markus Roth}
 %\date{Wintersemester 2013/14} % Activate to display a given date or no date (if empty),
          % otherwise the current date is printed 
@@ -78,27 +78,8 @@
 
 \maketitle
 
-\section{Die Idee}
-Viele LIMSe sind hochentwickelte, empfindliche Systeme, an die sich eher der Nutzer anpassen muss, anstatt anderesherum. Doch selbst in einer Welt zunehmender Standartisierung ist jedes Labor eine einzigartige Umgebung. Ziel von lucentLIMS ist daher, dem Nutzer selbst die Möglichkeit an die Hand zu geben, seine Installation leicht auf die eigenen Bedürfnisse anzupassen.
+\section{Installation}
 
-\subsection{Eckpfeiler}
-Daher standen bei der Entwicklung von lucent folgende Punkte im Zentrum:
+\input{"Installation (Deutsch).tex"}
 
-\begin{description}
-
-\item[Bekannter Unterbau] Ein Großteil der Programmlogik ist in Python geschrieben und bei Auswertungen kommt R zum Einsatz.
-Beide Sprachen sind sehr verbreitet und werden an Hochschulen unterrichtet.
-
-\item[Bekannte Sicherheit] lucent ist Linux-basiert.
-Die Benutzerverwaltung ist durch übliche Systemmittel (ssh, sudo) realisiert und kein Teil des Programms.
-
-\item[Strikt relational] Als RDBMS wird standardmäßig MariaDB verwendet.
-Alle Strukturen erfüllen die ersten drei Normalformen.
-
-\item[Leichtgewichtig] Entwicklung und Praxistests fanden auf einem RaspberryPi 4 statt.
-
-\end{description}
-
-\section{Zielgruppe}
-lucentLIMS ist für kleinere Labore mit Interesse an eigener Anpassung und Personal mit Programmiererfahrung geeignet.
 \end{document}
