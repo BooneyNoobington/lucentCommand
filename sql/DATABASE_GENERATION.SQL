@@ -203,6 +203,11 @@ CREATE OR REPLACE TABLE `calculation`
     -- Which input parameters are necessary? If more than one this
     -- table simply has multiple rows for each "measurand_result" (n to m).
   , measurand_input INTEGER NOT NULL REFERENCES `measurand` (id_measurand)
+    -- An input can consist of various groups. Like raw values for
+    -- variable a and some other values for variable b.
+    -- The c could be mean(a) - mean(b).
+    -- These groups are defined here.
+  , argument_group INTEGER NOT NULL
 );
 
 # An analysis is a collection of measurands from one or more procedures.
