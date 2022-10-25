@@ -63,6 +63,15 @@
 \renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
 
 
+%%% Add another layer of sections.
+\usepackage{titlesec}
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\include{"yaml_highlighting.tex"}
+
 
 %%% END Article customizations
 
@@ -81,5 +90,10 @@
 \section{Installation}
 
 \input{"Installation (Deutsch).tex"}
+
+\section{Die Kommandozeile}
+\subsection{Daten registrieren}
+
+\input{"register command(Deutsch).tex"}
 
 \end{document}

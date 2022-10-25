@@ -1,0 +1,73 @@
+Standardmäßig lassen sich Datensätze durch das Einlesen von YAML Dateien oder durch manuelle Eingaben in der Kommandozeile importieren.
+Welche Variante geschickter ist, hängt vom Szenario ab.
+Beispielsweise dürfte es in vielen Fällen schneller gehen, die Kopfdaten einer einzelnen Probe händisch einzugeben bzw. auszuwählen, anstatt zuerst eine YAML-Datei zu schreiben.
+Umfangreichere Sammlungen von Datensätzen, die gegenseitig auf sich verweisen, lassen sich klarer durch YAML-Dateien darstellen.
+Dabei nutzt lucentLIMS ein bestimmtes Format, welches später näher beschrieben wird.
+
+\par
+
+Daneben unterstützt lucentLIMS die Verwendung eingens geschriebener Import-Routinen, welche prinzipiell jedes Datenformat einlesen können.
+Diese Routinen gehören nicht zum Standard und werden von Ihnen selbst gestellt.
+Der Vorteil ist, dass es kein vorgegebenes Format der Eingabe-Dateien gibt und diese somit leichter lesbar sein können, als lucents generische YAML-Dateien.
+
+\paragraph{Manuelle Eingabe / Auswahl}
+
+Eingabe: \\
+\texttt{register manual [Tabellenname]}
+
+
+\paragraph{Generischer Import}
+
+Eingabe: \\
+\texttt{register generic [YAML-Datei]}
+
+\par
+
+Hier wird eine generisch formattierte Datei aus dem Unterverzeichnis \texttt{generic\_registration} des \textit{lucent Datenverzeichnisses} importiert.
+Ein Import aus einem anderen Verzeichnis ist standardmäßig nicht vorgesehen\footnote{Falls Sie unprivilegierten Nutzern das selbstständige Ablegen von Importdateien im Datenverzeichnis ermöglichen möchten, können sie es z.B. per Samba freigeben.}, so dass die Administratoren einzulesende Dateien prüfen können.
+
+\paragraph{Generisches Format}
+Jeder Datensatz wird durch exakt ein Dokument in einer YAML-Datei repräsentiert.
+Es gelten keine besonderen Regeln für unterschiedliche Tabellen.
+Beim eigenständigen Erstellen dieser Dateien wird Kenntnis des Datenmodells sowie ggf. grundlegenden SQL-Statements vorausgesetzt.
+
+\par
+
+\subparagraph{Metadaten}
+Folgende Keys beschreiben Informationen über den Datensatz selbst, enthalten jedoch nicht die eigentlichen Informationen, welche später in die Datenbank geschrieben werden sollen.
+
+\begin{description}
+\item[table name] Name jener Tabelle, in welche ein neuer Datensatz eingetragen werden soll.
+Muss bereits im Vorfeld bekannt sein.
+\item[before] Andere YAML-Dateien, die verarbeitet werden sollen, bevor die eigentliche Datei importiert wird.
+Kann z.B. Stammdaten zum eigentlichen Datensatz enthalten.
+\item[temp name] Eine vorrübergehende Bezeichnung des Datensatzes, die gespeichert wird, so lange der Import läuft.
+Liefert die id des Datensatzes für andere Datensätze in der gleichen Datei, die sich auf \texttt{temp name} beziehen.
+\end{description}
+
+\subparagraph{Felder}
+Der Key \texttt{fields and values} muss eine Liste von Key-Value-Paaren enthalten, welche die zu beschreibenden Felder und ihre jeweiligen Werte tragen.
+Die Feldnamen müssen zwingend bekannt sein.
+
+\par
+
+Die Werte können entweder durch direkte Angabe oder dyamisch befüllt werden. Falls der Wert dynamisch befüllt werden soll, muss auf den Key \texttt{get by} eines der untenstehenden Wörter folgen.
+
+\begin{description}
+\item[auto generate] Kann verwendet werden, um laufende Nummern zu erzeugen.
+
+\subitem{Option "type":} Kann auf "running", "no swap", "unique digits" oder "safe" gestellt werden (Standard: "running"). Siehe Nummerierung.
+
+\item[sql] Ruft einen Wert durch eine SQL-Abfrage ab.
+Falls mehrere Ergebnisse erzielt werden, wird nur das erste berücksichtig.
+
+\subitem{"query":} Die SQL-Abfrage.
+
+\item[temp name] Liefert den Wert des Primärschlüssels für einen anderen Datensatz, welcher einen temporären Namen zugeordnet bekommen hat.
+\end{description}
+
+\paragraph{Beispiel}
+
+Hier wird eine Probe imporiert.
+
+\lstinputlisting[language=yaml,firstnumber=1]{Samples_2022.yaml}
