@@ -30,7 +30,9 @@ git commit -m "$1"
 git push origin main
 
 # Change into working direcotry (return with popd?).
-pushd /opt/lucent
+if [[$2 == "y"]]; then
+    pushd /opt/lucent
 
-# Launch lucent.
-sudo -u lucent ./lucent.py
+    # Launch lucent.
+    sudo -u lucent ./lucent.py
+fi

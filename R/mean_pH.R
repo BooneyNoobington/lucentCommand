@@ -1,3 +1,5 @@
+#!/bin/env Rscript
+
 # Other code needed to complete this function.
 source("./R/helpers.r")  # Functions to solve two to three liners.
 source("./R/sql_interop.r")  # Talk to the data base.
