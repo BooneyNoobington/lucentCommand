@@ -171,11 +171,19 @@ class lucentTerminal(cmd.Cmd):
         import lucent_functions
         lucent_functions.sendMessage(self, line)
 
+    # Display system configuration.
     def do_config(self, line):
         import pprint
         pprint.pprint(self.config)
 
+    # Use a specific sample, sample group oder sample subgroup.
+    # TODO: All queries should be filtered to present only results fitting
+    # this selection.
     def do_use(self, line):
+
+        import lucent_functions  # First level functionality.
+
+        # Pull the command line apart.
         l = lucent_functions.cliFromStr(line, ["command"])
 
         # Select a specific sample. Can be used for simplifying other actions.
@@ -206,6 +214,7 @@ class lucentTerminal(cmd.Cmd):
             self.prompt = self.user + "@" + "lucentLIMS[sample ID: " + str(sampleId) + "]>> "
 
 
+    # Present a bit of info about the record selected.
     def do_info(self, line):
 
         import sql_interop as si
@@ -229,6 +238,11 @@ class lucentTerminal(cmd.Cmd):
         except AttributeError:
             print("Currently no record in use.")
 
+
+    # Clear the screen.
+    def do_clear(self, line):
+        import os
+        os.system("clear")  # Actually not Linux specific.
 
 
     ### Functions regarding the user ###
