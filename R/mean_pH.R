@@ -22,7 +22,7 @@ sql_connection <- database_connection(yaml::read_yaml(file = "./conf/config.yaml
 pH.data <- fetch_data(
     sql_connection  # Established above.
   , create_query_string(
-        "./R/mean_pH.SQL"  # Raw statement.
+        "./mean_pH.SQL"  # Raw statement.
         # Replace with actual ids for sample and procedure.
       , list("{sample.id}" = sample.id, "{procedure.id}" = procedure.id)
     )
