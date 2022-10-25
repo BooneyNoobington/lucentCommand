@@ -30,7 +30,7 @@ git commit -m "$1"
 git push origin main
 
 # Change into working direcotry (return with popd?).
-if [ $2 == "y" ]; then
+if [ $2 = "y" ]; then
     pushd /opt/lucent
 
     # Launch lucent.
