@@ -23,6 +23,11 @@ if (! file.exists("./R/mean_pH.SQL")){
 # Connect to the data base.
 sql_connection <- database_connection(yaml::read_yaml(file = "./conf/config.yaml"))
 
+print(create_query_string(
+        "./mean_pH.SQL"  # Raw statement.
+        # Replace with actual ids for sample and procedure.
+      , list("{sample.id}" = sample.id, "{procedure.id}" = procedure.id)
+    ))
 
 
 # Collect all the data.
