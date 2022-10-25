@@ -23,11 +23,8 @@ database_connection <- function(config){
 # Transform a saved query into an executable string.
 create_query_string <- function(file.path, replacements.list){
 
-    # Sanity check: Does the file exist?
-    if (! file.exists(file.path)) return(-1)
-
     source("./R/helpers.r")  # Functions for smaller problems.
-    ready_packages(c("readr"))
+    ready_packages(c("readr"))  # For opening a text file.
 
     # First open the file as is.
     query.raw <- readr::read_file(file.path)
