@@ -23,12 +23,6 @@ if (! file.exists("./R/mean_pH.SQL")){
 # Connect to the data base.
 sql_connection <- database_connection(yaml::read_yaml(file = "./conf/config.yaml"))
 
-print(create_query_string(
-        "./R/mean_pH.SQL"  # Raw statement.
-        # Replace with actual ids for sample and procedure.
-      , list("{sample.id}" = sample.id, "{procedure.id}" = procedure.id)
-    ))
-
 
 # Collect all the data.
 pH.data <- fetch_data(
@@ -40,7 +34,6 @@ pH.data <- fetch_data(
     )
 )
 
-print(pH.data)
 
 # Function to calculate a mean of several pHs.
 pH.mean <- function(pH.vec){
@@ -58,4 +51,8 @@ pH.mean <- function(pH.vec){
 }
 
 
+# Calculate the result.
+result.value <- pH.mean(pH.data$value)
+
+print(result.value)
 
