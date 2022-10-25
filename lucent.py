@@ -145,16 +145,15 @@ class lucentTerminal(cmd.Cmd):
     # Attaching n to m relations.
     def do_attach(self, line):
 
-        import lucent_functions
+        import lucent_functions  # First level functionality.
+        import nm_attach as na  # Attaching a n to m relation.
 
         # Process the given command line.
         l = lucent_functions.cliFromStr(line, ["command"])
 
+        # An analysis is to be attached.
         if l["command"].lower() == "analysis" or l["command"].lower() == "analyses":
-
-            import nm_attach as na
-
-            na.attachAnalysis(self)
+            na.attachAnalysis(self)  # Call a function for that specific purpose.
 
 
 
@@ -184,7 +183,11 @@ class lucentTerminal(cmd.Cmd):
         import lucent_functions  # First level functionality.
 
         # Pull the command line apart.
-        l = lucent_functions.cliFromStr(line, ["command"])
+        try:
+            l = lucent_functions.cliFromStr(line, ["command"])
+        except Exception as e:
+            print(f"Problem intereting command line, {e}. Aborting…")
+            return -1
 
         # Select a specific sample. Can be used for simplifying other actions.
         if l["command"].lower() == "sample":
@@ -206,7 +209,7 @@ class lucentTerminal(cmd.Cmd):
                 print(f"Error choosing a sample, {e}.")
                 return -1
 
-            # Safe the selected sample as attribute of the terminam.
+            # Safe the selected sample as attribute of the terminal.
             self.use = "sample"
             self.useId = sampleId
 
