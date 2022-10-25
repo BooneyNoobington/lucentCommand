@@ -24,7 +24,7 @@ if (! file.exists("./R/mean_pH.SQL")){
 sql_connection <- database_connection(yaml::read_yaml(file = "./conf/config.yaml"))
 
 print(create_query_string(
-        "./mean_pH.SQL"  # Raw statement.
+        "./R/mean_pH.SQL"  # Raw statement.
         # Replace with actual ids for sample and procedure.
       , list("{sample.id}" = sample.id, "{procedure.id}" = procedure.id)
     ))
@@ -34,7 +34,7 @@ print(create_query_string(
 pH.data <- fetch_data(
     sql_connection  # Established above.
   , create_query_string(
-        "./mean_pH.SQL"  # Raw statement.
+        "./R/mean_pH.SQL"  # Raw statement.
         # Replace with actual ids for sample and procedure.
       , list("{sample.id}" = sample.id, "{procedure.id}" = procedure.id)
     )
