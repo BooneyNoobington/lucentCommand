@@ -24,7 +24,9 @@ database_connection <- function(config){
 create_query_string <- function(file.path, replacements.list){
 
     # Sanity check: Does the file exist?
-    if (! file.exists(file.path)) return(-1)
+    if (! file.exists(file.path)){
+        return(-1)
+    } else { print("Exists.")}
 
     source("./R/helpers.r")  # Functions for smaller problems.
     ready_packages(c("readr"))
