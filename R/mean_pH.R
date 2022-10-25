@@ -14,8 +14,12 @@ sample.id <- args[1]
 procedure.id <- args[2]
 
 
+if (! file.exists("./mean_pH.SQL")) print("Error, query file not found.")
+quit(1)
+
 # Connect to the data base.
 sql_connection <- database_connection(yaml::read_yaml(file = "./conf/config.yaml"))
+
 
 
 # Collect all the data.
