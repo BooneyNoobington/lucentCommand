@@ -42,22 +42,14 @@ ready_packages <- function(
   if (always_install.bool){  # Do not check if packages are already installed.
     print("Force install these packages:")
     print(packages.vec)
-<<<<<<< HEAD
-    install.packages(new.packages, repos = repo)
-=======
     install.packages(new.packages, repos = repo, lib = "/opt/lucent/R/packages")
->>>>>>> 6a99cbdd13ad7f6d66db0fb668ad7082fa3d5db4
   } else {
     # Install only if there are packages that aren't available.
     print("Installing these packages:")
     print(new.packages)
-<<<<<<< HEAD
-    if(length(new.packages)) install.packages(new.packages, repos = repo)
-=======
     if(length(new.packages)){
       install.packages(new.packages, repos = repo, lib = "/opt/lucent/R/packages")
     }
->>>>>>> 6a99cbdd13ad7f6d66db0fb668ad7082fa3d5db4
   }
   
   # Now load all required packages.

@@ -47,7 +47,7 @@ class lucentTerminal(cmd.Cmd):
         # Can't place it in home directory. No write access.
 
         # Set up info regarding history file.
-        histfile_size = 1000  # Remember the last one thousand inputs.
+        self.histfile_size = 1000  # Remember the last one thousand inputs.
 
         try:
             histDir = self.config["data dir"]["path"] + f"/command_history/{self.user}"
@@ -126,7 +126,7 @@ class lucentTerminal(cmd.Cmd):
     # Create / update the history file.
     def postloop(self):
         import readline  # Save the command history.
-        readline.set_history_length(histfile_size)
+        readline.set_history_length(self.histfile_size)
         readline.write_history_file(self.histFile)
 
 
@@ -234,6 +234,7 @@ class lucentTerminal(cmd.Cmd):
     ### Functions regarding the user ###
     def do_my(self, line):
 
+        import lucent_functions  # First level functionality.
         import shlex  # For splitting strings respecting whitespace escapes.
 
         # Turn command line into seperate arguments.

@@ -37,6 +37,7 @@ create_query_string <- function(file.path, replacements.list){
         query.string <- gsub(r, replacements.list[[r]], query.string, perl = TRUE)
     }
 
+    # Return a string with all placeholders removed an no line breaks.
     return(query.string)
 
 }
