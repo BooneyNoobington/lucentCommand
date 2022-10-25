@@ -19,7 +19,7 @@ def cliFromStr(line, argumentsList):
 
     # Sanity check.
     if len(argumentsList) != len(lineAsList):
-        raise ValueError("Can't interpret command line. Two few or much arguments provided.")
+        print("Can't interpret command line. Two few or much arguments provided.")
 
     # Assign every argument its value.
     try:
