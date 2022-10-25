@@ -48,15 +48,10 @@ create_query_string <- function(file.path, replacements.list){
 
 
 # Fetch data from a MariaDB.
-fetch_data <- function(sql_connection, query_file, query_string = ""){
-
-    # Decide wether to use a query string or a file.
-    if (query_string != ""){
-        query = query_string
-    }
+fetch_data <- function(sql_connection, query_string){
 
     # Execute query.
-    results <- RMariaDB::dbSendQuery(sql_connection, query)
+    results <- RMariaDB::dbSendQuery(sql_connection, query_string)
     results.readable <- RMariaDB::dbFetch(results)
 
     # Send back the results to calling function.
