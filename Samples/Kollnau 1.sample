@@ -1,0 +1,5 @@
+id: 1
+name: "22.A.1"  # Name given automatically.
+spot: 1
+matrix: 1
+events: [1, 2, 8]

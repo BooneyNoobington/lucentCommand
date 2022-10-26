@@ -55,3 +55,17 @@ fetch_data <- function(sql_connection, query_string){
     return(results.readable)
 
 }
+
+
+
+# Update a given record.
+execute_statement <- function(sql_connection, statement.string){
+
+    source("./R/helpers.r")  # Functions for smaller problems.
+    ready_packages(c("RMariaDB", "DBI"))  # Connect to a MariaDB.
+
+
+    # Execute the statement.
+    DBI::dbExecute(sql_connection, statement.string)
+
+}

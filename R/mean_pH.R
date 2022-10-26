@@ -54,5 +54,9 @@ pH.mean <- function(pH.vec){
 # Calculate the result.
 result.value <- pH.mean(pH.data$value)
 
-print(result.value)
+# Pute the value into the database.
+statement.string <- concat(
+    "UPDATE `result` SET value = ", result.value, "WHERE id_sample = "
+  , sample.id, " AND id_measurand = ", measurand.id
+)
 

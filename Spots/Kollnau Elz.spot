@@ -1,0 +1,7 @@
+id: 1
+type: generic sampling spot
+subspots:
+  - shore:
+      id: 1
+      type: Shore of a river.
+      coordinates: 48°06'34.7"N+7°58'52.3"E

@@ -1,0 +1,17 @@
+---
+apt:
+    -
+        repo_update: update -y
+    -
+        system_upgrade: dist-upgrade -y
+    -
+        install: install -y
+
+---
+pacman:
+    -
+        repo_update: -Syy
+    -
+        system_upgrade: -Syyu
+    -
+        install: -S

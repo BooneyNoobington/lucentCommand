@@ -1,0 +1,11 @@
+---
+
+database:
+  path: /home/grindel/Entwicklung/lucentLIMS_data_dir/lucent_0.0.1.sqlite.db
+
+data dir:
+  path: /home/grindel/Entwicklung/lucentLIMS_data_dir
+
+hardware:
+  -
+    memory_limit: 200
