@@ -38,13 +38,13 @@ ready_packages <- function(
     if (always_install.bool){  # Do not check if packages are already installed.
         print("Force install these packages:")
         print(packages.vec)
-        install.packages(new.packages, repos = repo)
+        install.packages(new.packages, repos = repo, lib = "/opt/lucent/R/packages")
     } else {
         # Install only if there are packages that aren't available.
         print("Installing these packages:")
         print(new.packages)
         if(length(new.packages)){
-            install.packages(new.packages, repos = repo)
+            install.packages(new.packages, repos = repo, lib = "/opt/lucent/R/packages")
         }
     }
   
