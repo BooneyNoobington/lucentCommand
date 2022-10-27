@@ -395,4 +395,8 @@ def acceptResult(caller):
     print("Accepted:")
     pprint.pprint(acceptThese)
     print("Dismiss:")
-    pprint.pprint(myResults - acceptThese)
+
+    acceptTheseSet = set(acceptThese)
+    dismissThese = [e for e in myResults if e not in acceptTheseSet]
+
+    pprint.pprint(dismissThese)
