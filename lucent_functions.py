@@ -339,7 +339,11 @@ def calc(caller):
                       , argument = str(r["id_result"])
                     )
                 )
-                os.system(r["calculation"] + " " + str(r["id_result"]))  # This should call the script.
+                # Set environment variables first. Then call the script.
+                os.system(
+                    "R_LIBS_USER=/opt/lucent/R/packages"
+                    + r["calculation"] + " " + str(r["id_result"])
+                )
             # If the file isn't there inform the user about the problem.
             except FileNotFoundError:
                 print(
