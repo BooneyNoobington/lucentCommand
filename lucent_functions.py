@@ -329,8 +329,10 @@ def calc(caller):
     # Loop over all chosen results and initiate calculation.
     import os  # For calling other scripts in the lucent directory.
     for r in toCalcDicts:
+        print("Exectuing {calculation}".format(calculation = r["calculation"]))
+
         # Make sure a calculation is set.
-        if r["calculation"] is not None:
+        if r["calculation"] != "NULL":
             # If the file exists, try to execute the calculation script.
             try:
                 print(
