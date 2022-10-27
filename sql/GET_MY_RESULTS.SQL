@@ -12,16 +12,11 @@ FROM                `result_raw` rr  -- Start from here.
                 ON  p.id_procedure = rr.id_procedure
               JOIN  `unit` u  -- Unit for value.
                 ON  u.id_unit = rr.id_unit
+              JOIN  `procedure_person` pp
+                ON  pp.id_procedure = p.id_procedure
               JOIN  `person` per  -- Which people are asscociated with the procedure?
-                ON  per.id_person = p.id_person
+                ON  per.id_person = pp.id_person
 
 WHERE               rr.id_sample = {sampleId}  -- Limit to currently used sample…
                AND  per.unix_account = '{unixAccount}'  -- … and user logged in.
 ;
-
-
-
-              -- JOIN  `result` r
-              --   ON      rr.id_sample = r.id_sample
-              --       AND rr.id_procedure = r.id_procedure
-              --       AND rr.id_measurand = r.id_measurand
