@@ -3,6 +3,8 @@
 # Other code needed to complete this function.
 source("./R/helpers.r")  # Functions to solve two to three liners.
 source("./R/sql_interop.r")  # Talk to the data base.
+f <- new.env()
+source("./R/functions.R", local = f)  # Actual calculations.
 ready_packages(c("yaml"))
 
 
@@ -35,24 +37,9 @@ pH.data <- fetch_data(
 )
 
 
-# Function to calculate a mean of several pHs.
-pH.mean <- function(pH.vec){
-
-    # Transform log to concentration.
-	concentration <- exp(-(pH.vec)/(log(exp(1))))
-
-	# Compute mean. Ingore "not numbers".
-	concentration.mean <- mean(concentration, na.rm = TRUE )
-
-	# Re-transform to logarithm.
-	concentration.mean.log <- -log(concentration.mean)
-
-	return(concentration.mean.log)
-}
-
 
 # Calculate the result.
-result.value <- pH.mean(pH.data$value)
+result.value <- f$pH.mean(pH.data$value)
 
 # Pute the value into the database.
 statement.string <- concat(
