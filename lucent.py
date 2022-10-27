@@ -156,6 +156,12 @@ class lucentTerminal(cmd.Cmd):
             na.attachAnalysis(self)  # Call a function for that specific purpose.
 
 
+    # Manually initiate calculations.
+    def calc(self, line):
+        import lucent_functions
+        lucent_functions.calc(self)
+
+
 
 
     ### Miscellaneous methods ###

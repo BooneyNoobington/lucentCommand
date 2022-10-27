@@ -299,3 +299,22 @@ def getMessages(caller):
 
         # Execute statement.
         si.executeStatement(caller.sqlConnection, statementRead)
+
+
+
+# Manually initate calculations.
+def calc(caller):
+    # Make sure a sample is selected for use.
+    if caller.use is None or caller.useId is None:
+        print("Please choose a sample first. \nUsage: use sample")
+        return -1
+
+    # Extract a list of options.
+    import sql_helpers as sh
+    options = sh.getOptions(caller.sqlConnection, "readable_result")
+
+    # Have the user pick one ore more results to calculate.
+    import pick
+    resultsToCalc = pick.pick(options)
+
+    print(resultsToCalc)

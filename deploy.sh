@@ -20,14 +20,17 @@ sudo chown lucent:lucent -R "$data_target"
 # Change into source directory.
 cd $source
 
-# Add new / changed files.
-git add .
-
-# Commit with a short comment.
-git commit -m "$1"
-
 # Upload to github.
-git push origin main
+if [[ "$1" != "" ]]; then
+    # Add new files.
+    git add .
+
+    # Commit with a short comment.
+    git commit -m "$1"
+
+    # Upload to github.
+    git push origin main
+fi
 
 # Change into working direcotry (return with popd?).
 pushd /opt/lucent
