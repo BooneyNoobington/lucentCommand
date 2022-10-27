@@ -388,5 +388,11 @@ def acceptResult(caller):
       , multiselect = True
     )
 
+    # Turn the accepted values into a list of dictianories (remove tuple wrapping).
+    acceptThese = [d[0] for d in acceptThese]
+
     import pprint
+    print("Accepted:")
     pprint.pprint(acceptThese)
+    print("Dismiss:")
+    pprint.pprint([d from d in myResults and not in acceptThese])
