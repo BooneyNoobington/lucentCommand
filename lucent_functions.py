@@ -390,12 +390,15 @@ def acceptResult(caller):
 
     # Turn the accepted values into a list of dictianories (remove tuple wrapping).
     acceptThese = [d[0] for d in acceptThese]
+    acceptTheseIds = [d["id_result_raw"] for d in acceptThese]
+    acceptTheseIdsStr = ", ".join(acceptTheseIds)
 
-    import pprint
-    print("Accepted:")
-    pprint.pprint(acceptThese)
-    print("Dismiss:")
-
+    # Dismiss everything not accepted. TODO: Is this dangerous? Dismissal is already
+    # The default status for a result.
     dismissThese = [e for e in myResults if e not in acceptThese]
 
-    pprint.pprint(dismissThese)
+    # Update the result_raw table.
+    si.executeStatement(
+        caller.sqlConnection
+      , f"UPDATE `result_raw` SET ACCEPTED = 1 WHERE id_result_raw IN ({acceptTheseIdsStr})"
+    )

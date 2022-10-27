@@ -4,6 +4,7 @@ SELECT              rr.id_sample AS "sample id"
                   , rr.value AS "raw result"
                   , u.formula AS "unit"
                   , rr.accepted AS "acceptance status"
+                  , rr.id_result_raw AS "raw result number"
 
 FROM                `result_raw` rr  -- Start from here.
               JOIN  `measurand` m  -- More info about what was measured.
