@@ -373,7 +373,7 @@ def acceptResult(caller):
             caller.sqlConnection
             , si.buildQueryString(
                 "./sql/GET_MY_RESULTS.SQL"
-              , {"sampleId": caller.usedId, "unixAccount": caller.user}
+              , {"sampleId": caller.useId, "unixAccount": caller.user}
             )
         )
     except Exception as e:
