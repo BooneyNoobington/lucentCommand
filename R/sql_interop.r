@@ -51,6 +51,9 @@ fetch_data <- function(sql_connection, query_string){
     results <- RMariaDB::dbSendQuery(sql_connection, query_string)
     results.readable <- RMariaDB::dbFetch(results)
 
+    # Clear the results. TODO: Understand what exactly that means.
+    RMariaDB::dbClearResult(results)
+
     # Send back the results to calling function.
     return(results.readable)
 
