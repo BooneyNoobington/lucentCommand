@@ -3,7 +3,7 @@ SELECT              rr.id_sample AS "sample id"
                   , m.identifier AS "measurand"
                   , rr.value AS "raw result"
                   , u.formula AS "unit"
-                  , rr.accpeted AS "acceptance status"
+                  , rr.accepted AS "acceptance status"
 
 FROM                `result_raw` rr  -- Start from here.
               JOIN  `measurand` m  -- More info about what was measured.
@@ -16,8 +16,8 @@ FROM                `result_raw` rr  -- Start from here.
                 ON  per.id_person = p.id_person
 
 WHERE               rr.id_sample = {sampleId}  -- Limit to currently used sample…
-               AND  p.unix_account = {unixAccount}  -- … and user logged in.
-
+               AND  per.unix_account = '{unixAccount}'  -- … and user logged in.
+;
 
 
 
