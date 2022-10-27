@@ -390,7 +390,7 @@ def acceptResult(caller):
 
     # Turn the accepted values into a list of dictianories (remove tuple wrapping).
     acceptThese = [d[0] for d in acceptThese]
-    acceptTheseIds = [d["id_result_raw"] for d in acceptThese]
+    acceptTheseIds = [d["raw result number"] for d in acceptThese]
     acceptTheseIdsStr = ", ".join(acceptTheseIds)
 
     # Dismiss everything not accepted. TODO: Is this dangerous? Dismissal is already
