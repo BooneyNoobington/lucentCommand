@@ -305,7 +305,10 @@ def getMessages(caller):
 # Manually initate calculations.
 def calc(caller):
     # Make sure a sample is selected for use.
-    if caller.use is None or caller.useId is None:
+    try:
+        usedTable = caller.use
+        usedId = caller.useId
+    except AttributeError:
         print("Please choose a sample first. \nUsage: use sample")
         return -1
 
@@ -315,6 +318,33 @@ def calc(caller):
 
     # Have the user pick one ore more results to calculate.
     import pick
-    resultsToCalc = pick.pick(options)
+    toCalc = pick.pick(options, multiselect = True)
 
-    print(resultsToCalc)
+    # Extract the dictianories from the list of tuples.
+    toCalcDicts = [t[0] for t in toCalc]
+
+    # Extract the ids of the results to be calculated.
+    toCalcIds = [d["id_result"] for d in toCalcDicts]
+
+    # Loop over all chosen results and initiate calculation.
+    import os  # For calling other scripts in the lucent directory.
+    for r in toCalcDicts:
+        # Make sure a calculation is set.
+        if r["calculation"] is not None:
+            # If the file exists, try to execute the calculation script.
+            try:
+                print(
+                    "Executing: {script} {argument}".format(
+                        script = r["calculation"]
+                      , argument = str(r["id_result"])
+                    )
+                )
+                os.system(r["calculation"] + " " + str(r["id_result"]))  # This should call the script.
+            # If the file isn't there inform the user about the problem.
+            except FileNotFoundError:
+                print(
+                    "Error: Calculation script {script} doesn't exist}".format(
+                        script = r["calculation"]
+                    )
+                )
+

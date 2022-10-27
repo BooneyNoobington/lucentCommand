@@ -22,6 +22,9 @@ def ensurePath(string):
         raise NotADirectoryError(string)
 
 
+
+
+
 # Transform a string to a true or false boolean.
 def strToBool(
     s

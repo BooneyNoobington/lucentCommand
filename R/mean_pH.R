@@ -10,8 +10,7 @@ ready_packages(c("yaml"))
 args = commandArgs(trailingOnly = TRUE)
 
 # Interpret the arguments.
-sample.id <- args[1]
-procedure.id <- args[2]
+result.id <- args[1]
 
 # Sanity check, does the file exist?
 if (! file.exists("./R/mean_pH.SQL")){
@@ -25,12 +24,24 @@ sql_connection <- database_connection(yaml::read_yaml(file = "./conf/config.yaml
 
 
 # Collect all the data.
+
+# What sample, procedure and measurand is this about?
+spm <- fetch_data(
+    sql_connection  # Established above.
+  , paste(
+        "SELECT id_sample, id_procedure, id_measurand FROM `result` WHERE id_result = "
+      , result.id
+      , sep = ""
+    )
+)
+
+# What's the input?
 pH.data <- fetch_data(
     sql_connection  # Established above.
   , create_query_string(
         "./R/mean_pH.SQL"  # Raw statement.
         # Replace with actual ids for sample and procedure.
-      , list("{sample.id}" = sample.id, "{procedure.id}" = procedure.id)
+      , list("{sample.id}" = spm$id_sample, "{procedure.id}" = spm$id_procedure)
     )
 )
 
@@ -56,9 +67,9 @@ result.value <- pH.mean(pH.data$value)
 
 # Pute the value into the database.
 statement.string <- paste(
-    "UPDATE `result` SET value = ", result.value, "WHERE id_sample = ", sample.id
-  , "AND id_procedure = ", procedure.id
-  , "AND calculation = \'mean_pH.R\'"
+    "UPDATE `result` SET value = ", result.value, "WHERE id_sample = ", spm$id_sample
+  , "AND id_procedure = ", spm$id_procedure
+  , "AND id_measurand = ", spm$id_measurand
 )
 
 execute_statement(sql_connection, statement.string)

@@ -157,7 +157,7 @@ class lucentTerminal(cmd.Cmd):
 
 
     # Manually initiate calculations.
-    def calc(self, line):
+    def do_calc(self, line):
         import lucent_functions
         lucent_functions.calc(self)
 
