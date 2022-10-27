@@ -352,3 +352,41 @@ def calc(caller):
                     )
                 )
 
+
+
+# Accept a raw result.
+def acceptResult(caller):
+
+    # Make sure a sample is selected for use.
+    # TODO: This is used the second time here. Own function or to overblown?
+    try:
+        usedTable = caller.use
+        usedId = caller.useId
+    except AttributeError:
+        print("Please choose a sample first. \nUsage: use sample")
+        return -1
+
+    # List all the results that are related to current user.
+    import sql_interop as si  # Contacting the database.
+    try:
+        myResults = si.fetchData(
+            caller.sqlConnection
+            , si.buildQueryString(
+                "./sql/GET_MY_RESULTS.SQL"
+              , {"sampleId": caller.usedId, "unixAccount": caller.user}
+            )
+        )
+    except Exception as e:
+        print(f"Problem compiling list of results for {caller.user}, {e}.")
+        return -1
+
+    # Have the user select the results he wants to accept.
+    import pick
+    acceptThese = pick.pick(
+        myResults
+      , "These results can be accepted or dismissed."
+      , multiselect = True
+    )
+
+    import pprint
+    pprint(acceptThese)

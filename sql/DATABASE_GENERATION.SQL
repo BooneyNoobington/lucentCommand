@@ -92,11 +92,11 @@ CREATE OR REPLACE TABLE `procedure`
   , active BOOLEAN NOT NULL
   , description VARCHAR(250)
   , id_sop INTEGER REFERENCES `sop` (id_sop)
-    # Name (and version) alone don't have to be unique but in combination they are.
+    -- Name (and version) alone don't have to be unique but in combination they are.
   , CONSTRAINT ident_iter_unique UNIQUE(identifier, iteration)
 );
 
-# A procedure can depend on multiple other procedures.
+-- A procedure can depend on multiple other procedures.
 CREATE OR REPLACE TABLE `procedure_procedure`
 (
     id_procedure_procedure INTEGER PRIMARY KEY UNIQUE NOT NULL
@@ -105,12 +105,24 @@ CREATE OR REPLACE TABLE `procedure_procedure`
 );
 
 
+-- A procedure is linked to one or more people with differenz responsibilities.
+CREATE OR REPLACE TABLE `procedure_person`
+(
+    id_procedure_person INTEGER PRIMARY KEY UNIQUE NOT NULL
+  , id_procedure INTEGER NOT NULL REFERENCES `procedure` (id_procedure)
+  , id_person INTEGER NOT NULL REFERENCES `person` (id_person)
+    -- What job does this person have regarding the procedure.
+  , role VARCHAR(40) NOT NULL
+    -- All of these attributes combined are unique.
+  , CONSTRAINT person_proc_job_unique UNIQUE(id_procedure, id_person, role)
+);
+
 CREATE OR REPLACE TABLE `device`
 (
     id_device INTEGER PRIMARY KEY UNIQUE NOT NULL
   , identifier VARCHAR(50) NOT NULL
   , number INTEGER NOT NULL
-  , id_organisation INTEGER REFERENCES `organisation` (id_organisation)  # Manufacturer.
+  , id_organisation INTEGER REFERENCES `organisation` (id_organisation)  -- Manufacturer.
   , active BOOLEAN NOT NULL DEFAULT TRUE
   , CONSTRAINT name_and_number_unqiue UNIQUE(identifier, number)
 );
@@ -126,7 +138,7 @@ CREATE OR REPLACE TABLE `matrix`
 (
     id_matrix INTEGER PRIMARY KEY UNIQUE NOT NULL
   , identifier VARCHAR(20) NOT NULL UNIQUE
-  , class VARCHAR(25) NOT NULL  # General type of the matrix. Solid object, fluid, soil ...
+  , class VARCHAR(25) NOT NULL  -- General type of the matrix. Solid object, fluid, soil ...
   , description VARCHAR(250)
 );
 
@@ -210,18 +222,18 @@ CREATE OR REPLACE TABLE `calculation`
   , argument_group INTEGER NOT NULL
 );
 
-# An analysis is a collection of measurands from one or more procedures.
+-- An analysis is a collection of measurands from one or more procedures.
 CREATE OR REPLACE TABLE `analysis`
 (
     id_analysis INTEGER PRIMARY KEY UNIQUE NOT NULL
   , identifier VARCHAR(50) NOT NULL
   , iteration DATETIME NOT NULL
-    # Name (and version) alone don't have to be unique. But in combination
-    # they should be.
+    -- Name (and version) alone don't have to be unique. But in combination
+    -- they should be.
   , CONSTRAINT ident_iter_unique UNIQUE(identifier, iteration)
 );
 
-# Connect analyses and procedures.
+-- Connect analyses and procedures.
 CREATE OR REPLACE TABLE `analysis_procedure_measurand`
 (
     id_analysis_procedure_measurand INTEGER PRIMARY KEY UNIQUE NOT NULL
@@ -263,7 +275,7 @@ CREATE OR REPLACE TABLE `address`
   , id_street INTEGER REFERENCES `street` (id_street)
   , house_number INTEGER NOT NULL
   , house_number_addition VARCHAR(5)
-    # Make sure that there is only one house per street.
+    -- Make sure that there is only one house per street.
   , CONSTRAINT house_number_addition_street UNIQUE(
         house_number
       , house_number_addition
@@ -296,9 +308,9 @@ CREATE OR REPLACE TABLE `spot`
   , class VARCHAR(30) NOT NULL
 );
 
-# For choosing a spot interactively, information about the site is also
-# Important. This view will be prefered when lucent is asking
-# interactively for a spot.
+-- For choosing a spot interactively, information about the site is also
+-- Important. This view will be prefered when lucent is asking
+-- interactively for a spot.
 CREATE OR REPLACE VIEW `attach_spot` AS
   SELECT        `spot`.id_spot
               , `spot`.identifier AS "name of spot"
@@ -313,7 +325,7 @@ CREATE OR REPLACE VIEW `attach_spot` AS
             ON  `body_of_water`.id_body_of_water = `spot`.id_body_of_water
 ;
 
-# A tool to loosely group samples together. Mostly for lab internal use.
+-- A tool to loosely group samples together. Mostly for lab internal use.
 CREATE OR REPLACE TABLE `samplegroup`
 (
     id_samplegroup INTEGER PRIMARY KEY UNIQUE NOT NULL
@@ -321,7 +333,7 @@ CREATE OR REPLACE TABLE `samplegroup`
   , description VARCHAR(250) NOT NULL
 );
 
-# More fine grained grouping.
+-- More fine grained grouping.
 CREATE OR REPLACE TABLE `samplesubgroup`
 (
     id_samplesubgroup INTEGER PRIMARY KEY UNIQUE NOT NULL
@@ -329,22 +341,22 @@ CREATE OR REPLACE TABLE `samplesubgroup`
   , id_samplegroup INTEGER NOT NULL REFERENCES `samplegroup` (id_samplegroup)
 );
 
-# One of the most important tables. The center for all measurements
+-- One of the most important tables. The center for all measurements
 CREATE OR REPLACE TABLE `sample`
 (
-    # (Internal) Number of the sample. More clunky than a readable number.
+    -- (Internal) Number of the sample. More clunky than a readable number.
     id_sample INTEGER PRIMARY KEY UNIQUE NOT NULL
-    # The identifier is not unique. To the user it will be presented as a
-    # concat between sample group identifier + sample subgroup identifier and + sample identifier.
+    -- The identifier is not unique. To the user it will be presented as a
+    -- concat between sample group identifier + sample subgroup identifier and + sample identifier.
   , id_samplesubgroup INTEGER NOT NULL REFERENCES `samplesubgroup` (id_samplesubgroup)
   , identifier INTEGER
-    # Where was the sample taken?
+    -- Where was the sample taken?
   , id_spot INTEGER NOT NULL
-    # What material was sampled?
+    -- What material was sampled?
   , id_matrix INTEGER NOT NULL REFERENCES `matrix` (id_matrix)
-    # How did the sampling happen? TODO: Maybe rename just to sampling or sampling_class?
+    -- How did the sampling happen? TODO: Maybe rename just to sampling or sampling_class?
   , id_sampleclass INTEGER NOT NULL REFERENCES `sampleclass` (id_sampleclass)
-    # Make sure that in each subgroup every readable number (identifier) exists only once.
+    -- Make sure that in each subgroup every readable number (identifier) exists only once.
   , CONSTRAINT ident_and_subg_unique UNIQUE(identifier, id_samplesubgroup)
   , CONSTRAINT `id_spot`
       FOREIGN KEY (id_spot) REFERENCES `spot` (id_spot)
@@ -352,7 +364,7 @@ CREATE OR REPLACE TABLE `sample`
       ON UPDATE RESTRICT
 );
 
-# A nicer view for interactivity.
+-- A nicer view for interactivity.
   CREATE OR REPLACE VIEW `attach_sample` AS
     SELECT          s.id_sample
                   , sc.identifier AS "sampleclass"
@@ -387,62 +399,71 @@ CREATE OR REPLACE TABLE `sample`
 
 --- Series 3: Results.
 
-# Important: Raw results are inserted in an somewhat unplanned manner.
-# Every time a device produces a result, it can be individually inserted
-# into the database.
+-- Important: Raw results are inserted in an somewhat unplanned manner.
+-- Every time a device produces a result, it can be individually inserted
+-- into the database.
 
-# TODO: Maybe make it so that values can directly be inserted into `result`.
+-- TODO: Maybe make it so that values can directly be inserted into `result`.
 CREATE OR REPLACE TABLE `result_raw`
 (
     id_result_raw INTEGER PRIMARY KEY UNIQUE NOT NULL
-    # Which sample was this measurement taken in?
+    -- Which sample was this measurement taken in?
   , id_sample INTEGER NOT NULL REFERENCES `sample` (id_sample)
-    # What was measured?
+    -- What was measured?
   , id_measurand INTEGER NOT NULL REFERENCES `measurand` (id_measurand)
-    # How was it measured?
+    -- How was it measured?
   , id_procedure INTEGER NOT NULL REFERENCES `procedure` (id_procedure)
-    # From wich device comes the result?
+    -- From wich device comes the result?
   , id_device INTEGER NOT NULL REFERENCES `device` (id_device)
-    # When was the measurement aquired?
+    -- When was the measurement aquired?
   , moment DATETIME NOT NULL
-    # Who did the measurement?
+    -- Who did the measurement?
   , id_person INTEGER NOT NULL REFERENCES `person`(id_person)
-    # What was the actual result and which unit has it?
-    # (Uncertainty is known by method.)
+    -- What was the actual result and which unit has it?
+    -- (Uncertainty is known by method.)
   , value DOUBLE NOT NULL
   , id_unit INTEGER NOT NULL REFERENCES `unit` (id_unit)
+    -- Raw results need to be either accepted or declined
+    -- before a calculation can be made.
+    -- TODO: (Semi) Non enforceable rule. The calculation alone script decides
+    -- which raw values it uses.
+  , accepted BOOLEAN NOT NULL DEFAULT 0  -- By default now value is accepted.
 );
 
-# This table is inserted in advance. It results from a connection between a
-# sample and its analyses.
+
+-- This table is inserted in advance. It results from a connection between a
+-- sample and its analyses.
 CREATE OR REPLACE TABLE `result`
 (
     id_result INTEGER PRIMARY KEY UNIQUE NOT NULL
-    # Which sample was this measurement taken in?
+    -- Which sample was this measurement taken in?
   , id_sample INTEGER NOT NULL REFERENCES `sample` (id_sample)
-    # What was measured?
+    -- What was measured?
   , id_measurand INTEGER NOT NULL REFERENCES `measurand` (id_measurand)
-    # How was it measured? Strictly a reference to a procedure is not neccessary
-    # here, since everything about the procedures can be derived from the analyses.
+    -- How was it measured? Strictly a reference to a procedure is not neccessary
+    -- here, since everything about the procedures can be derived from the analyses.
   , id_analysis INTEGER NOT NULL REFERENCES `analysis` (id_analysis)
   , id_procedure INTEGER NOT NULL REFERENCES `procedure` (id_procedure)
-    # From wich device comes the result? This is also not known at insert time since
-    # any procedure can be valid for multiple devices.
+    -- From wich device comes the result? This is also not known at insert time since
+    -- any procedure can be valid for multiple devices.
   , id_device INTEGER REFERENCES `device` (id_device)
-    # Who did the measurement? Not clear on insert time.
+    -- Who did the measurement? Not clear on insert time.
   , id_person INTEGER REFERENCES `person`(id_person)
-    # When was the measurement aquired? Not clear on insert time.
+    -- When was the measurement aquired? Not clear on insert time.
   , moment DATETIME
-    # What was the actual result and which unit has it?
-    # (Uncertainty is known by method.)
-  , value DOUBLE  # Null until calculated.
-  , id_unit INTEGER NOT NULL REFERENCES `unit` (id_unit)  # Can be overwritten.
-    # Point to a custom python script that does the calculation.
+    -- What was the actual result and which unit has it?
+    -- (Uncertainty is known by method.)
+  , value DOUBLE  -- Null until calculated.
+  , id_unit INTEGER NOT NULL REFERENCES `unit` (id_unit)  -- Can be overwritten.
+    -- Point to a custom script that does the calculation.
   , calculation VARCHAR(60) NOT NULL
+    -- Make sure that only one there is only one result for
+    -- a given sample, measurand and procedure.
+  , CONSTRAINT spm_unique UNIQUE(id_sample, id_procedure, id_measurand)
 );
 
 
-# A readable overview for results.
+-- A readable overview for results.
 CREATE OR REPLACE VIEW `readable_result` AS
   SELECT          r.id_result
                 , r.id_sample
@@ -462,16 +483,16 @@ CREATE OR REPLACE VIEW `readable_result` AS
               ON  a.id_analysis = r.id_analysis
             JOIN  `procedure` p
               ON  p.id_procedure = r.id_procedure
-       LEFT JOIN  `device` d  # Left join because device might be initially null.
+       LEFT JOIN  `device` d  -- Left join because device might be initially null.
               ON  d.id_device = r.id_device
-       LEFT JOIN  `person` pe  # Left join because experimentator might be unknown.
+       LEFT JOIN  `person` pe  -- Left join because experimentator might be unknown.
               ON  pe.id_person = r.id_person
             JOIN  `unit` u
               ON  u.id_unit = r.id_unit
 ;
 
 
-# Realize "tables" sample_analysis and sample_procedure as views. Performance ?!?
+-- Realize "tables" sample_analysis and sample_procedure as views. Performance ?!?
 CREATE OR REPLACE VIEW `sample_analysis` AS
   SELECT DISTINCT       s.id_sample
                       , a.id_analysis

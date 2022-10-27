@@ -162,6 +162,10 @@ class lucentTerminal(cmd.Cmd):
         lucent_functions.calc(self)
 
 
+    # Accept and decline results.
+    def do_accept(self, line):
+        import lucent_functions
+        lucent_functions.acceptResult(self)
 
 
     ### Miscellaneous methods ###
