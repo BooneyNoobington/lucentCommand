@@ -22,6 +22,8 @@ cd $source
 
 # Upload to github.
 if [[ "$1" != "" ]]; then
+    echo "Commiting" $1
+
     # Add new files.
     git add .
 
