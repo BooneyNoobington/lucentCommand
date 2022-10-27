@@ -395,4 +395,4 @@ def acceptResult(caller):
     print("Accepted:")
     pprint.pprint(acceptThese)
     print("Dismiss:")
-    pprint.pprint(myResults.difference(acceptThese))
+    pprint.pprint(myResults - acceptThese)
