@@ -41,9 +41,9 @@ ready_packages <- function(
         install.packages(new.packages, repos = repo, lib = "/opt/lucent/R/packages")
     } else {
         # Install only if there are packages that aren't available.
-        print("Installing these packages:")
-        print(new.packages)
         if(length(new.packages)){
+            print("Installing these packages:")
+            print(new.packages)
             install.packages(new.packages, repos = repo, lib = "/opt/lucent/R/packages")
         }
     }
