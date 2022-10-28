@@ -1,25 +1,14 @@
 #!/bin/env Rscript
 
-# Other code needed to complete this function.
-source("./R/helpers.r")  # Functions to solve two to three liners.
-source("./R/sql_interop.r")  # Talk to the data base.
-ready_packages(c("yaml"))
-
-
-# Calculate mean of arbitrary inputs.
+# Grab command line arguments.
 args = commandArgs(trailingOnly = TRUE)
 
-# Interpret the arguments.
-result.id <- args[1]
-
-# Sanity check, does the file exist?
-if (! file.exists("./R/mean_pH.SQL")){
-    print("Error, query file not found.")
-    quit("no")  # Abort execution, don't save workspace.
-}
-
+# See if the conditions for the correct execution of this script are met.
+source("./R/conditions.R")
+ensure_conditions(mean_pH.R)
 
 # Connect to the data base.
+# Argument is lucent config which is read by read_yaml and returned as a list.
 sql_connection <- database_connection(yaml::read_yaml(file = "./conf/config.yaml"))
 
 
@@ -30,37 +19,26 @@ spm <- fetch_data(
     sql_connection  # Established above.
   , paste(
         "SELECT id_sample, id_procedure, id_measurand FROM `result` WHERE id_result = "
-      , result.id
+      , args[1]  # This is the results id.
       , sep = ""
     )
 )
 
 # What's the input?
+# This is highly variable depending on the needs of the script.
+# It doesn't always just load the raw values with the same sample, procedure and measurand.
 pH.data <- fetch_data(
     sql_connection  # Established above.
   , create_query_string(
         "./R/mean_pH.SQL"  # Raw statement.
         # Replace with actual ids for sample and procedure.
-      , list("{sample.id}" = spm$id_sample, "{procedure.id}" = spm$id_procedure)
+      , list(
+            "{sample.id}" = spm$id_sample
+          , "{procedure.id}" = spm$id_procedure
+          , "{measurand.id}" = spm$id_measurand
+        )
     )
 )
-
-
-# Function to calculate a mean of several pHs.
-pH.mean <- function(pH.vec){
-
-    # Transform log to concentration.
-	concentration <- exp(-(pH.vec)/(log(exp(1))))
-
-	# Compute mean. Ingore "not numbers".
-	concentration.mean <- mean(concentration, na.rm = TRUE )
-
-	# Re-transform to logarithm.
-	concentration.mean.log <- -log(concentration.mean)
-
-	return(concentration.mean.log)
-}
-
 
 # Calculate the result.
 result.value <- pH.mean(pH.data$value)

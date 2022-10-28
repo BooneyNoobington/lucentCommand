@@ -376,6 +376,14 @@ def acceptResult(caller):
               , {"sampleId": caller.useId, "unixAccount": caller.user}
             )
         )
+
+        myResultsSimple = si.fetchData(
+                caller.sqlConnection
+              , si.buildQueryString(
+                    "./sql/GET_MY_RESULTS_SIMPLIFIED.SQL"
+                  , {"sampleId": caller.useId, "unixAccount": caller.user}
+                )
+        )
     except Exception as e:
         print(f"Problem compiling list of results for {caller.user}, {e}.")
         return -1
@@ -392,6 +400,7 @@ def acceptResult(caller):
     acceptThese = [d[0] for d in acceptThese]
     acceptTheseIds = [str(d["raw result number"]) for d in acceptThese]
     acceptTheseIdsStr = ", ".join(acceptTheseIds)
+    acceptedRaws = [d for d in myResultsSimple if str(d["id_result_raw"]) in acceptTheseIds]
 
     # Dismiss everything not accepted. TODO: Is this dangerous? Dismissal is already
     # The default status for a result.
@@ -402,3 +411,56 @@ def acceptResult(caller):
         caller.sqlConnection
       , f"UPDATE `result_raw` SET ACCEPTED = 1 WHERE id_result_raw IN ({acceptTheseIdsStr})"
     )
+
+    # Find out to which result id these raw values belong.
+    affectedIds = []
+    for d in acceptedRaws:
+
+        # Get the identifying attributes for a specific end result.
+        try:
+            currentSampleId = d["id_sample"]
+            currentProcedureId = d["id_procedure"]
+            currentMeasurandId = d["id_measurand"]
+        except KeyError as e:
+            print(f"Error: Cannot identify affected end result. {e}")
+            return -1
+
+        # If all identifying attributes are there, compile a list of affected end results.
+        try:
+            affectedIds.append(
+                si.fetchData(
+                  caller.sqlConnection
+                , si.buildQueryString(
+                        "./sql/GET_IDS_FOR_CALC.SQL"
+                    , {
+                            "currentSampleId": currentSampleId
+                        , "currentProcedureId": currentProcedureId
+                        , "currentMeasurandId": currentMeasurandId
+                      }
+                  )
+                )[0]["id_result"]
+            )
+        except Exception as e:
+            print(f"Problem compiling a list of affected end results for calculation, {e}.")
+
+    # Remove dupes.
+    affectedIds = list(set(affectedIds))
+
+    # Loop over all affected end results and trigger their calculation.
+    import os  # To give commands to the shell.
+
+    for r in affectedIds:
+        # Get name of calculation.
+        try:
+            calc = si.fetchData(
+                caller.sqlConnection
+              , f"SELECT calculation FROM `result` WHERE id_result = {r}"
+            )[0]["calculation"]
+        except Exception as e:
+            print(f"Error: Can't find calculation for end result {r}, {e}.")
+
+        # Trigger the calculation.
+        try:
+            os.system("R_LIBS_USER=/opt/lucent/R/packages " + calc + " " + str(r))
+        except Exception as e:
+            print(f"Error: Cannot calculate end result {r}, {e}.")
