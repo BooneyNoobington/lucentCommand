@@ -144,12 +144,10 @@ def attachRelation(caller, relationTable):
         except KeyError:
             print(f"Table name not found. Configuration error?")
 
-    import pprint
-    pprint.pprint(choicesDict)
-
-
     # Loop over all tables and insert it into the relation table.
     # Every table.
+    keysAndValues = {}
+
     for t in choicesDict.items():
         # Loop over the tuples of the items.
         try:
@@ -157,8 +155,8 @@ def attachRelation(caller, relationTable):
         except KeyError:
             print(f"Primary key not provided for {key}.")
 
-        # Every chosen record.
-        for r in t[1]:
-            pkv = r[pk]
+        # Add all the primary keys and their values to a dictianory.
+        keysAndValues[t[0]]["primary key"] = pk
+        keysAndValues[t[0]]["values"] = [r[pk] for r in t[1]]
 
-            print(f"Inserting primary key {pk} with value {pkv}.")
+    print(keysAndValues)
