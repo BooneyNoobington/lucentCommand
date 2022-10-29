@@ -121,6 +121,8 @@ def attachRelation(caller, relationTable):
 
     # Loop over all references.
     for ref in tableRefs:
+        print(ref)
+
         # Make sure all the keys needed are present.
         try:
             refToTable = ref["refToTable"]
