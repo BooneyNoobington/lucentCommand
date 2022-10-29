@@ -115,8 +115,8 @@ def attachRelation(caller, relationTable):
         )
     )
 
-    # These keys need to be filled with values.
-    keyList = tableRefs[0].keys()
+    # All these columns need to be filled.
+    keyList = si.fetchData(f"SHOW COLUMNS FROM `{relationTable}`;")
 
     # For every reference to another table an option list needs to be compiled.
     import sql_helpers as sh  # For compiling list of options.
@@ -148,3 +148,7 @@ def attachRelation(caller, relationTable):
             selectionList = [d[0] for d in selectionList]
         except Exception as e:
             print(f"Error removing tuples from selection list, {e}.")
+
+        print(selectionList)
+
+    print(keyList)
