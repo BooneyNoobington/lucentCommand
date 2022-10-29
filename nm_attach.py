@@ -135,7 +135,7 @@ def attachRelation(caller, relationTable):
     except KeyError:  # Choice text is optional.
         masterTableChoice = [t[0] for t in
             pick.pick(
-                masterTableOptions, tableInfo["options for"]["master table"], multiselect = True)
+                masterTableOptions, tableInfo["options for"]["master table"], multiselect = True
             )
         ]
 
@@ -158,7 +158,7 @@ def attachRelation(caller, relationTable):
     except KeyError:  # Choice text is optional.
         detailTableChoice = [t[0] for t in
             pick.pick(
-                masterTableOptions, tableInfo["options for"]["detail table"], multiselect = True)
+                masterTableOptions, tableInfo["options for"]["detail table"], multiselect = True
             )
         ]
 
