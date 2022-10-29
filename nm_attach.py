@@ -118,7 +118,7 @@ def attachRelation(caller, relationTable):
 
     # Collect options for records in the the master table.
     try:
-        masterTableOptions = si.getOptions(
+        masterTableOptions = sh.getOptions(
             caller.sqlConnection, tableInfo["options for"]["master table"]["table name"]
         )
     except KeyError:
@@ -141,7 +141,7 @@ def attachRelation(caller, relationTable):
 
     # Collect options for records in the the detail table.
     try:
-        detailTableOptions = si.getOptions(
+        detailTableOptions = sh.getOptions(
             caller.sqlConnection, tableInfo["options for"]["detail table"]["table name"]
         )
     except KeyError:
