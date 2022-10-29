@@ -104,6 +104,8 @@ def attachAnalysis(caller):
 # Generic attach.
 def attachRelation(caller, relationTable):
 
+    import sql_interop as si  # Talk to the database.
+
     # Get information about the relation table.
     tableRefs = si.fetchData(
         caller.sqlConnection
