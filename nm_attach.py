@@ -119,7 +119,7 @@ def attachRelation(caller, relationTable):
     # Collect options for records in the the master table.
     try:
         masterTableOptions = sh.getOptions(
-            caller.sqlConnection, tableInfo["options for"]["master table"]["table name"]
+            caller.sqlConnection, tableInfo["master table"]["table name"]
         )
     except KeyError:
         print("Error collection options for master table. Correctly configured?")
@@ -129,20 +129,20 @@ def attachRelation(caller, relationTable):
     try:
         masterTableChoice = pick.pick(
             masterTableOptions
-          , tableInfo["options for"]["master table"]["choice text"]
+          , tableInfo["master table"]["choice text"]
           , multiselect = True
         )
     except KeyError:  # Choice text is optional.
         masterTableChoice = [t[0] for t in
             pick.pick(
-                masterTableOptions, tableInfo["options for"]["master table"], multiselect = True
+                masterTableOptions, tableInfo["master table"], multiselect = True
             )
         ]
 
     # Collect options for records in the the detail table.
     try:
         detailTableOptions = sh.getOptions(
-            caller.sqlConnection, tableInfo["options for"]["detail table"]["table name"]
+            caller.sqlConnection, tableInfo["detail table"]["table name"]
         )
     except KeyError:
         print("Error collection options for detail table. Correctly configured?")
@@ -152,13 +152,13 @@ def attachRelation(caller, relationTable):
     try:
         detailTableChoice = pick.pick(
             masterTableOptions
-          , tableInfo["options for"]["detail table"]["choice text"]
+          , tableInfo["detail table"]["choice text"]
           , multiselect = True
         )
     except KeyError:  # Choice text is optional.
         detailTableChoice = [t[0] for t in
             pick.pick(
-                masterTableOptions, tableInfo["options for"]["detail table"], multiselect = True
+                masterTableOptions, tableInfo["detail table"], multiselect = True
             )
         ]
 

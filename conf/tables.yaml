@@ -2,22 +2,17 @@
 # and their relations which cannot be derived from the rdbms directly.
 tables:
     # Analyses are collections of measurands which can be attached to a sample.
-    analysis:
+    sample_analysis:
         # These attachment information will be respected.
         attach rules:
-            # Put relation information in this table.
-            relation table: sample_analysis
             # Present the user with choices for these related tables.
-            options for:
-                -
-                    master table:
-                        table name: sample
-                        # Choice text is optional.
-                        choice text: Please choose one or more sample to attach an analysis to.
-                        # This foreign key (in this case in sample_analysis) will be filled by
-                        # the selection from this table (here `sample`).
-                        foreign key: id_sample  # Also optional. Default: same as primary key.
-                -
-                    detail table:
-                        table name: analysis
-                        choice text: The analysis or analyses you pick here wil be attached to the samples you picked earlier.
+            master table:
+                table name: sample
+                # Choice text is optional.
+                choice text: Please choose one or more sample to attach an analysis to.
+                # This foreign key (in this case in sample_analysis) will be filled by
+                # the selection from this table (here `sample`).
+                foreign key: id_sample  # Also optional. Default: same as primary key.
+            detail table:
+                table name: analysis
+                choice text: The analysis or analyses you pick here wil be attached to the samples you picked earlier.
