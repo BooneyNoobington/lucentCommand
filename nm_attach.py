@@ -168,8 +168,8 @@ def attachRelation(caller, relationTable):
         print(masterEntry)
         for detailEntry in detailTableChoice:
             pkr = si.getPrimaryKey(caller.sqlConnection, relationTable)
-            pkm = si.getPrimaryKey(caller.sqlConnection, masterEntry[0]["table name"])
-            pkd = si.getprimaryKey(caller.sqlConnection, detailEntry[0]["table name"])
+            pkm = si.getPrimaryKey(caller.sqlConnection, tableInfo["master table"]["table name"])
+            pkd = si.getprimaryKey(caller.sqlConnection, tableInfo["detail table"]["table name"])
 
             keyList = [pkr, pkm, pkd]
 
@@ -177,7 +177,7 @@ def attachRelation(caller, relationTable):
                 # Auto generate running number for relation.
                 n.getNextNumber(
                     si.fetchData(
-                        caller.sqlConnection, f"SELECT MAX({pkr} AS max FROM {relationTable})"
+                        caller.sqlConnection, f"SELECT MAX({pkr} AS max FROM {relationTable});"
                     )[0]["max"]
                 )
                 # Value for primary key field of master table.
