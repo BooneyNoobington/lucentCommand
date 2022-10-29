@@ -179,6 +179,5 @@ def attachRelation(caller, relationTable):
                 except KeyError:
                     pass
 
-    print(keyList)
-    print(valueList)
-
+    # Execute the insert.
+    si.genericInsert(caller.sqlConnection, keyList, valuesList)
