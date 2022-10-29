@@ -121,12 +121,13 @@ def attachRelation(caller, relationTable):
 
     # Have the user choose.
     import sql_interop as si  # Fetch data, insert records.
+    import sql_helpers as sh  # SQL-related helpers.
     import pick  # Choose from a list of options.
     choicesDict = {}  # Initialize empty dict.
 
     # Loop over all references defined in config.
     for r in refList:
-        opts = si.getOptions(caller.sqlConnection, r["table name"])
+        opts = sh.getOptions(caller.sqlConnection, r["table name"])
 
         try:
             rChoices = pick.pick(opts, r["choice text"])
