@@ -181,7 +181,7 @@ def attachRelation(caller, relationTable):
 
     # Execute the insert.
     try:
-        si.genericInsert(caller.sqlConnection, keyList, valueList)
+        si.genericInsert(caller.sqlConnection, relationTable, keyList, valueList)
     except Exception as e:
         print(f"Could not insert the n to m relation. Error: {e}.")
         print("Keys and values were:")
