@@ -17,19 +17,20 @@ def cliFromStr(line, argumentsList):
     # Initialize empty dictianory for arguments and their values.
     argsAndVals = {}
 
-    # # Sanity check.
-    # if len(argumentsList) != len(lineAsList):
-    #     print("Can't interpret command line. Two few or much arguments provided.")
-
     # Assign every argument its value.
     try:
         i = 0  # TODO: More pythonic way?
         # Loop over all passed argument names.
         for arg in argumentsList:
-            # Assign value.
-            argsAndVals[arg] = lineAsList[i]
-            # Increment counter.
-            i = i + 1
+            try:
+                # Assign value.
+                argsAndVals[arg] = lineAsList[i]
+                # Increment counter.
+                i = i + 1
+            # Maybe more arguments were given that there are elemts in the list.
+            # In that case, do nothing.
+            except IndexError:
+                pass
     except Exception as e:
         print(f"Error interpreting command line, {e}.")
         return -1
