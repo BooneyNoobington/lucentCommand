@@ -245,17 +245,22 @@ def registerManually(caller, table):
             # Load the respective function from the module imported above.
             f = getattr(loadMod, caller.config["tables"][table][l]["get by"]["method"])
 
-            # Get the value by the function obtained above.
+            # Get the value by the function obtained above and append infos to lists.
             value = f(1)
+            fieldList.append(l)
+            valueList.append(value)
 
             # If this works, this iteration of the loop is finished.
             continue
+
         # At least one (if not all) of the keys aren't available if
         # no auto generation is defined in system config.
         except KeyError:
             pass  # Manual entry.
 
-        # Ask the user.
+        # Ask the user if no automatic generation is configured.
+        # TODO: Check wether this is the most efficient way to code this
+        # since this is the more frequent case and not the one above.
         try:
             value = input(f"Please input a value for {l}: ")
         except Exception as e:
