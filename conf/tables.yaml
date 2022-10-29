@@ -1,5 +1,5 @@
 tables:
-    table name: analysis
+    analysis:
         relation table: result
         options for: [sample, analysis]
         columns:

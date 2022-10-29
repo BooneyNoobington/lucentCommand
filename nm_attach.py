@@ -105,7 +105,7 @@ def attachAnalysis(caller):
 def attachRelation(caller, relationTable):
 
     # Get information about the relation table.
-    tableInfo = [d for d in caller.config["tables"] if d["table name"] == relationTable]
+    tableInfo = caller.config[relationTable]
 
     import pprint
     pprint.pprint(tableInfo)
