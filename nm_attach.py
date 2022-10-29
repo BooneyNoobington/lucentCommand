@@ -105,84 +105,45 @@ def attachAnalysis(caller):
 def attachRelation(caller, relationTable):
 
     # Get information about the relation table.
-    try:
-        tableInfo = caller.config["tables"][relationTable]["attach rules"]
-    except KeyError:
-        print(f"Import for {relationTable} not configured.")
-        return -1
-
-    # Have the user choose.
-    import sql_interop as si  # Fetch data, insert records.
-    import sql_helpers as sh  # SQL-related helpers.
-    import pick  # Choose from a list of options.
-
-    # Collect options for records in the the master table.
-    try:
-        masterTableOptions = sh.getOptions(
-            caller.sqlConnection, tableInfo["master table"]["table name"]
+    import sql_interop as si
+    # Fetch the meta table.
+    tableRefs = si.fetchData(
+        caller.sqlConnection
+      , si.buildQueryString(
+            "./sql/GET_TABLE_REFS.SQL"
+          , {"table": relationTable}
         )
-    except KeyError:
-        print("Error collection options for master table. Correctly configured?")
-        return -1
+    )
 
-    # Have the user pick one.
-    try:
-        masterTableChoice = pick.pick(
-            masterTableOptions
-          , tableInfo["master table"]["choice text"]
-          , multiselect = True
+    # For every reference to another table an option list needs to be compiled.
+    import sql_helpers as sh  # For compiling list of options.
+    import pick  # For having the user pick.
+
+    # Loop over all references.
+    for ref in tableRefs:
+
+        # Make sure all the keys needed are present.
+        try:
+            refToTable = ref["refToTable"]
+            refToColumn = ref["refToColumn"]
+            referencingColumn = ref["referencingCol"]
+        except KeyError as e:
+            print(f"Problem in compiling options list for generic attach. Key not found: {e}.")
+
+        # Grab all the options.
+        optionList = sh.getOptions(caller.sqlConnection, refToTable)
+
+        # Have the user pick one.
+        selectionList = pick.pick(
+            optionList
+          , f"Please pick a record from table {refToTable}."
+          , multiselect = True  # TODO: Is this safe?
         )
-    except KeyError:  # Choice text is optional.
-        masterTableChoice = [t[0] for t in
-            pick.pick(
-                masterTableOptions, tableInfo["master table"], multiselect = True
-            )
-        ]
 
-    # Collect options for records in the the detail table.
-    try:
-        detailTableOptions = sh.getOptions(
-            caller.sqlConnection, tableInfo["detail table"]["table name"]
-        )
-    except KeyError:
-        print("Error collection options for detail table. Correctly configured?")
-        return -1
+        # Remove the tuples.
+        try:
+            selectionList = [d[0] for d in selectionList]
+        except Exception as e:
+            print(f"Error removing tuples from selection list, {e}.")
 
-    # Have the user pick one.
-    try:
-        detailTableChoice = pick.pick(
-            detailTableOptions
-          , tableInfo["detail table"]["choice text"]
-          , multiselect = True
-        )
-    except KeyError:  # Choice text is optional.
-        detailTableChoice = [t[0] for t in
-            pick.pick(
-                detailTableOptions, tableInfo["detail table"], multiselect = True
-            )
-        ]
-
-    import numbering as n
-
-    for masterEntry in masterTableChoice:
-        for detailEntry in detailTableChoice:
-            pkr = si.getPrimaryKey(caller.sqlConnection, relationTable)
-            pkm = si.getPrimaryKey(caller.sqlConnection, tableInfo["master table"]["table name"])
-            pkd = si.getPrimaryKey(caller.sqlConnection, tableInfo["detail table"]["table name"])
-
-            keyList = [pkr, pkm, pkd]
-
-            valueList = [
-                # Auto generate running number for relation.
-                n.getNextNumber(
-                    si.fetchData(
-                        caller.sqlConnection, f"SELECT MAX({pkr}) AS max FROM `{relationTable}`;"
-                    )[0]["max"]
-                )
-                # Value for primary key field of master table.
-              , masterEntry[0][pkm]
-              , detailEntry[0][pkd]
-            ]
-
-            print(keyList)
-            print(valueList)
+        print(selectionList)
