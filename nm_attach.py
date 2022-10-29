@@ -115,6 +115,9 @@ def attachRelation(caller, relationTable):
         )
     )
 
+    # These keys need to be filled with values.
+    keyList = tableRefs[0].keys()
+
     # For every reference to another table an option list needs to be compiled.
     import sql_helpers as sh  # For compiling list of options.
     import pick  # For having the user pick.
@@ -148,5 +151,3 @@ def attachRelation(caller, relationTable):
 
         # Insert into the relation table.
         keyList = tableRefs.keys()
-
-        print(keyList)
