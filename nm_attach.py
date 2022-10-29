@@ -130,12 +130,15 @@ def attachRelation(caller, relationTable):
         opts = sh.getOptions(caller.sqlConnection, r["table name"])
 
         try:
-            rChoices = pick.pick(opts, r["choice text"])
+            rChoices = pick.pick(opts, r["choice text"], multiselect = True)
         except KeyError:  # Choice texts aren't mandatory.
-            rChoices = pick.pick(opts)
+            rChoices = pick.pick(opts, multiselect = True)
 
         # Add the choice to the respective dict.
-        choicesDict[r["table name"]] = [c[0] for c in rChoices]
+        try:
+            choicesDict[r["table name"]] = [c[0] for c in rChoices]
+        except KeyError:
+            print(f"Table name not found. Configuration error?")
 
     import pprint
     pprint.pprint(choicesDict)
