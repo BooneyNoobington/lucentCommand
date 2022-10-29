@@ -126,6 +126,7 @@ def attachRelation(caller, relationTable):
     import pick  # For having the user pick.
 
     # Loop over all references.
+    selections = []  # Fill by user selections.
     for ref in tableRefs:
 
         # Make sure all the keys needed are present.
@@ -140,18 +141,9 @@ def attachRelation(caller, relationTable):
         optionList = sh.getOptions(caller.sqlConnection, refToTable)
 
         # Have the user pick one.
-        selectionList = pick.pick(
-            optionList
-          , f"Please pick a record from table {refToTable}."
-          , multiselect = True  # TODO: Is this safe?
-        )
+        selectionList = pick.pick(optionList, f"Please pick a record from table {refToTable}.")
 
-        # Remove the tuples.
-        try:
-            selectionList = [d[0] for d in selectionList]
-        except Exception as e:
-            print(f"Error removing tuples from selection list, {e}.")
-
-        print(selectionList)
+        selections.append(selectionList)
 
     print(keyList)
+    print(selections)
