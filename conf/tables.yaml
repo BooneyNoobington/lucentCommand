@@ -14,11 +14,11 @@ tables:
                     # Choice text is optional. TODO: Catch by KeyError.
                     choice text: Please choose one or more sample to attach an analysis to.
                     # Ask for samples first.
-                    order: 1
+                    # order: 1
                 -
                     table name: analysis
                     choice text: The analysis or analyses you pick here wil be attached to the samples you picked earlier.
-                    order: 2
+                    # order: 2
             # Handle these other columns in a specific way.
             columns:
                 id_result:
