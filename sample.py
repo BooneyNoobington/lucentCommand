@@ -1,6 +1,14 @@
 #!/bin/env python3
 
 
+# Generate a safe sample number.
+def getSafeNumber(currentMax):
+    import numbering n
+    return 100
+
+
+
+
 # Function to compute the next readable number for the sample.
 def getNextReadable(currentMax, computation = "running"):
 
