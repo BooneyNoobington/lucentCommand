@@ -166,5 +166,8 @@ def attachRelation(caller, relationTable):
 
     # Now insert the values into the relation table.
 
-    for kv in keysAndValues:
-        print(keysAndValues[kv])
+    fieldList = keysAndValues.keys()
+    values = [keysAndValues[kv] for kv in keysAndValues]
+
+    print(fieldList)
+    print(values)
