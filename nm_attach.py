@@ -121,6 +121,12 @@ def attachRelation(caller, relationTable):
         si.fetchData(caller.sqlConnection, f"SHOW COLUMNS FROM `{relationTable}`;")
     ]
 
+    # Identify primary key and its current maximum value.
+    pk = si.getPrimaryKey(caller.sqlConnection, relationTable)
+    currentMaxPK = si.fetchData(
+        caller.sqlConnection, f"SELECT MAX({pk}) AS currentMax FROM `{relationTable}`;"
+    )[0]["currentMax"]
+
     # For every reference to another table an option list needs to be compiled.
     import sql_helpers as sh  # For compiling list of options.
     import pick  # For having the user pick.
@@ -137,13 +143,29 @@ def attachRelation(caller, relationTable):
         except KeyError as e:
             print(f"Problem in compiling options list for generic attach. Key not found: {e}.")
 
-        # Grab all the options.
-        optionList = sh.getOptions(caller.sqlConnection, refToTable)
+        # Grab all the options. View are not allowed. In view columns can have different names.
+        optionList = sh.getOptions(caller.sqlConnection, refToTable, False)
 
         # Have the user pick one.
         sel, i = pick.pick(optionList, f"Please pick a record from table {refToTable}.")
 
         selections.append(sel)
 
-    print(keyList)
-    print(selections)
+    # Prepare the values.
+    valueList = []  # Empty list to be filled.
+    import numbering as n  # To auto generate numbers.
+
+    # Loop over all keys.
+    for k in keyList:
+        # Is k the primary key?
+        if k == pk:
+            valueList.append(n.getNextNumber(currentMaxPK))
+        # Fill by user?
+        elif k not in [d["referencingCol"] for d in tableRefs[0]]:
+            valueList.append(input(f"Please input a value for field {k}"))
+        # Other values where chosen above.
+        else:
+            valueList.append(next(item[k] for item in selections if item[k]))
+
+    print(valueList)
+
