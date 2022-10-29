@@ -141,9 +141,9 @@ def attachRelation(caller, relationTable):
         optionList = sh.getOptions(caller.sqlConnection, refToTable)
 
         # Have the user pick one.
-        selectionList = pick.pick(optionList, f"Please pick a record from table {refToTable}.")
+        sel, i = pick.pick(optionList, f"Please pick a record from table {refToTable}.")
 
-        selections.append(selectionList)
+        selections.append(sel)
 
     print(keyList)
     print(selections)
