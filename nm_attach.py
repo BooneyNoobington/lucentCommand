@@ -161,4 +161,4 @@ def attachRelation(caller, relationTable):
         for r in t[1]:
             pkv = r[pk]
 
-        print(f"Inserting primary key {pk} with value {pkv}.")
+            print(f"Inserting primary key {pk} with value {pkv}.")
