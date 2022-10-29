@@ -180,4 +180,4 @@ def attachRelation(caller, relationTable):
                     pass
 
     # Execute the insert.
-    si.genericInsert(caller.sqlConnection, keyList, valuesList)
+    si.genericInsert(caller.sqlConnection, keyList, valueList)
