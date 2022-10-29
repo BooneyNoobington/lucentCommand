@@ -111,5 +111,13 @@ def attachRelation(caller, relationTable):
         print(f"Import for {relationTable} not configured.")
         return -1
 
-    import pprint
-    pprint.pprint(tableInfo)
+    # First let the user choose all the records defined in the config.
+    # Order the list of choosable relations by the order.
+    try:
+        refList = sorted(tableInfo["options for"], key = lambda d: d["order"])
+    # It isn't mandatory to define orders.
+    except KeyError:
+        refList = tableInfo["options for"]
+
+
+    print(refList)
