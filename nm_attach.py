@@ -149,7 +149,7 @@ def attachRelation(caller, relationTable):
     # Loop over all tables and insert it into the relation table.
     # Every table.
     for key in choicesDict["table name"].keys():
-        for choice in choicesDict[key]
+        for choice in choicesDict[key]:
             # Every chosen record.
             for d in choice:
                 try:
