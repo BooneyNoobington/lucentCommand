@@ -162,6 +162,27 @@ def attachRelation(caller, relationTable):
             )
         ]
 
-    import pprint
-    pprint.pprint(masterTableChoice)
-    pprint.pprint(detailTableChoice)
+    import numbering as n
+
+    for masterEntry in masterTableChoice:
+        for detailEntry in detailTableChoice:
+            pkr = si.getPrimaryKey(relationTable)
+            pkm = si.getPrimaryKey(masterEntry["table name"])
+            pkd = si.getprimaryKey(detailEntry["table name"])
+
+            keyList = [pkr, pkm, pkd]
+
+            valueList = [
+                # Auto generate running number for relation.
+                n.getNextNumber(
+                    si.fetchData(
+                        caller.sqlConnection, f"SELECT MAX({pkr} AS max FROM {relationTable})")
+                    )[0]["max"]
+                )
+                # Value for primary key field of master table.
+              , masterEntry[pkm]
+              , detailEntry[pkd]
+            ]
+
+            print(keyList)
+            print(valueList)
