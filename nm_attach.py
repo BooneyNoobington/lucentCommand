@@ -146,4 +146,7 @@ def attachRelation(caller, relationTable):
         except Exception as e:
             print(f"Error removing tuples from selection list, {e}.")
 
-        print(selectionList)
+        # Insert into the relation table.
+        keyList = tableRefs.keys()
+
+        print(keyList)
