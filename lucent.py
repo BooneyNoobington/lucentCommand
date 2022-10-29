@@ -156,11 +156,11 @@ class lucentTerminal(cmd.Cmd):
             na.attachAnalysis(self)  # Call a function for that specific purpose.
         # Generic version.
         elif l["command"].lower() == "generic":
-            try:
+            # try:
                 na.attachRelation(self, l["table"])
             # User didn't provide a table name.
-            except KeyError as e:
-                print(f"Please provide a table to insert the relation to. ({e})")
+            # except KeyError as e:
+            #     print(f"Please provide a table to insert the relation to. ({e})")
             # Other stuff tat can go wrong.
             # except Exception as e:
             #     r = l["table"]
