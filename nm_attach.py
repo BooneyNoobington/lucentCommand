@@ -150,16 +150,15 @@ def attachRelation(caller, relationTable):
 
     # Loop over all tables and insert it into the relation table.
     # Every table.
-    for choice in choicesDict.items():
+    for t in choicesDict.items():
+        # Loop over the tuples of the items.
+        try:
+            pk = si.getPrimaryKey(caller.sqlConnection, t[0])
+        except KeyError:
+            print(f"Primary key not provided for {key}.")
+
         # Every chosen record.
-        for t in choice:
-            try:
-                pk = si.getPrimaryKey(caller.sqlConnection, t[0])
-            except KeyError:
-                print(f"Primary key not provided for {key}.")
+        for r in t[1]:
+            pkv = r[pk]
 
-            # Every chosen record.
-            for r in t[1]:
-                pkv = r[pk]
-
-            print(f"Inserting primary key {pk} with value {pkv}.")
+        print(f"Inserting primary key {pk} with value {pkv}.")
