@@ -3,7 +3,7 @@
 
 # Generate a safe sample number.
 def getSafeNumber(currentMax):
-    import numbering n
+    import numbering as n
     return 100
 
 
