@@ -166,7 +166,7 @@ def attachRelation(caller, relationTable):
         if k == pk:
             valueList.append(n.getNextNumber(currentMaxPK))
         # Fill by user?
-        elif k not in [d["referencingCol"] for d in tableRefs[0]]:
+        elif k not in [d["referencingCol"] for d in tableRefs]:
             valueList.append(input(f"Please input a value for field {k}"))
         # Other values where chosen above.
         else:
