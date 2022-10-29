@@ -166,9 +166,9 @@ def attachRelation(caller, relationTable):
 
     for masterEntry in masterTableChoice:
         for detailEntry in detailTableChoice:
-            pkr = si.getPrimaryKey(relationTable)
-            pkm = si.getPrimaryKey(masterEntry["table name"])
-            pkd = si.getprimaryKey(detailEntry["table name"])
+            pkr = si.getPrimaryKey(caller.sqlConnection, relationTable)
+            pkm = si.getPrimaryKey(caller.sqlConnection, masterEntry["table name"])
+            pkd = si.getprimaryKey(caller.sqlConnection, detailEntry["table name"])
 
             keyList = [pkr, pkm, pkd]
 
