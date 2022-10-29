@@ -125,7 +125,7 @@ def attachRelation(caller, relationTable):
         try:
             refToTable = ref["refToTable"]
             refToColumn = ref["refToColumn"]
-            referencingColumn = ref["referencingColumn"]
+            referencingColumn = ref["referencingCol"]
         except KeyError as e:
             print(f"Problem in compiling options list for generic attach. Key not found: {e}.")
 
