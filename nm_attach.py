@@ -142,7 +142,7 @@ def attachRelation(caller, relationTable):
         # Add the choice and primary key to the respective dict.
         try:
             choicesDict[r["table name"]] = [c[0] for c in rChoices]
-            primaryKeys = si.getPrimaryKey(caller.sqlConnection, r["table name"])
+            primaryKeys[r["table name"]] = si.getPrimaryKey(caller.sqlConnection, r["table name"])
         except KeyError:
             print(f"Table name not found. Configuration error?")
 
