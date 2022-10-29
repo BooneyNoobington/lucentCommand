@@ -10,15 +10,14 @@ tables:
             # Present the user with choices for these related tables.
             options for:
                 -
-                    table name: sample
-                    # Choice text is optional.
-                    choice text: Please choose one or more sample to attach an analysis to.
-                    # Ask for samples first. Also optional.
-                    order: 1
-                    # This foreign key (in this case in sample_analysis) will be filled by
-                    # the selection from this table (here `sample`).
-                    foreign key: id_sample  # Also optional. Default: same as primary key.
+                    master table:
+                        table name: sample
+                        # Choice text is optional.
+                        choice text: Please choose one or more sample to attach an analysis to.
+                        # This foreign key (in this case in sample_analysis) will be filled by
+                        # the selection from this table (here `sample`).
+                        foreign key: id_sample  # Also optional. Default: same as primary key.
                 -
-                    table name: analysis
-                    choice text: The analysis or analyses you pick here wil be attached to the samples you picked earlier.
-                    order: 2
+                    detail table:
+                        table name: analysis
+                        choice text: The analysis or analyses you pick here wil be attached to the samples you picked earlier.

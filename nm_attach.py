@@ -111,63 +111,57 @@ def attachRelation(caller, relationTable):
         print(f"Import for {relationTable} not configured.")
         return -1
 
-    # First let the user choose all the records defined in the config.
-    # Order the list of choosable relations by the order.
-    try:
-        refList = sorted(tableInfo["options for"], key = lambda d: d["order"])
-    # It isn't mandatory to define orders.
-    except KeyError:
-        refList = tableInfo["options for"]
-
     # Have the user choose.
     import sql_interop as si  # Fetch data, insert records.
     import sql_helpers as sh  # SQL-related helpers.
     import pick  # Choose from a list of options.
-    choicesDict = {}  # Initialize empty dict.
 
-    # Loop over all references defined in config.
-    for r in refList:
-        # Collect options for user to choose from.
-        opts = sh.getOptions(caller.sqlConnection, r["table name"])
+    # Collect options for records in the the master table.
+    try:
+        masterTableOptions = si.getOptions(
+            caller.sqlConnection, tableInfo["options for"]["master table"]["table name"]
+        )
+    except KeyError:
+        print("Error collection options for master table. Correctly configured?")
+        return -1
 
-        try:
-            rChoices = pick.pick(opts, r["choice text"], multiselect = True)
-        except KeyError:  # Choice texts aren't mandatory.
-            rChoices = pick.pick(opts, multiselect = True)
-        except ValueError:
-            print("Was the list of options empty?")
-            return -1
+    # Have the user pick one.
+    try:
+        masterTableChoice = pick.pick(
+            masterTableOptions
+          , tableInfo["options for"]["master table"]["choice text"]
+          , multiselect = True
+        )
+    except KeyError:  # Choice text is optional.
+        masterTableChoice = [t[0] for t in
+            pick.pick(
+                masterTableOptions, tableInfo["options for"]["master table"], multiselect = True)
+            )
+        ]
 
-        # Add the choice and primary key to the respective dict.
-        try:
-            choicesDict[r["table name"]] = [c[0] for c in rChoices]
-        except KeyError:
-            print(f"Table name not found. Configuration error?")
+    # Collect options for records in the the detail table.
+    try:
+        detailTableOptions = si.getOptions(
+            caller.sqlConnection, tableInfo["options for"]["detail table"]["table name"]
+        )
+    except KeyError:
+        print("Error collection options for detail table. Correctly configured?")
+        return -1
 
-    # Loop over all tables and insert it into the relation table.
-    # Every table.
-    keysAndValues = {}
+    # Have the user pick one.
+    try:
+        detailTableChoice = pick.pick(
+            masterTableOptions
+          , tableInfo["options for"]["detail table"]["choice text"]
+          , multiselect = True
+        )
+    except KeyError:  # Choice text is optional.
+        detailTableChoice = [t[0] for t in
+            pick.pick(
+                masterTableOptions, tableInfo["options for"]["detail table"], multiselect = True)
+            )
+        ]
 
-    for t in choicesDict.items():
-        # Loop over the tuples of the items.
-        try:
-            pk = si.getPrimaryKey(caller.sqlConnection, t[0])
-        except KeyError:
-            print(f"Primary key not provided for {key}.")
-
-        # Add all the primary keys and their values to a dictianory.
-        # tmpDict = {}
-        # tmpDict["primary key"] = pk
-        # tmpDict["values"] = [r[pk] for r in t[1]]
-        #
-        # keysAndValues[t[0]] = tmpDict
-
-        keysAndValues[pk] = [r[pk] for r in t[1]]
-
-    # Now insert the values into the relation table.
-
-    fieldList = keysAndValues.keys()
-    valuesList = keysAndValues.values()
-
-    print(fieldList)
-    print(valuesList)
+    import pprint
+    pprint.pprint(masterTableChoice)
+    pprint.pprint(detailTableChoice)
