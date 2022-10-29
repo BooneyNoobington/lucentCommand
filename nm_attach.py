@@ -146,6 +146,10 @@ def attachRelation(caller, relationTable):
         except KeyError:
             print(f"Table name not found. Configuration error?")
 
+    import pprint
+    pprint.pprint(choicesDict)
+
+
     # Loop over all tables and insert it into the relation table.
     # Every table.
     for key in choicesDict["table name"].keys():
