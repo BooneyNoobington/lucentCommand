@@ -130,6 +130,7 @@ def attachRelation(caller, relationTable):
     # For every reference to another table an option list needs to be compiled.
     import sql_helpers as sh  # For compiling list of options.
     import pick  # For having the user pick.
+    import mariadb  # For error handling of sql related problems.
 
     # Loop over all references.
     selections = []  # Fill by user selections.
@@ -144,7 +145,11 @@ def attachRelation(caller, relationTable):
             print(f"Problem in compiling options list for generic attach. Key not found: {e}.")
 
         # Grab all the options. View are not allowed. In view columns can have different names.
-        optionList = sh.getOptions(caller.sqlConnection, refToTable, False)
+        try:
+            optionList = sh.getOptions(caller.sqlConnection, refToTable, viewAllowed = False)
+        except mariadb.ProgrammingError as e:
+            print(f"Compiling list of options failed because of an sql error ({e}).")
+            return -1
 
         # Have the user pick one.
         sel, i = pick.pick(optionList, f"Please pick a record from table {refToTable}.")
