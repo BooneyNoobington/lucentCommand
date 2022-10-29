@@ -162,9 +162,9 @@ class lucentTerminal(cmd.Cmd):
             except KeyError as e:
                 print(f"Please provide a table to insert the relation to. ({e})")
             # Other stuff tat can go wrong.
-            except Exception as e:
-                r = l["table"]
-                print(f"Problem inserting into {r}, {e}.")
+            # except Exception as e:
+            #     r = l["table"]
+            #     print(f"Problem inserting into {r}, {e}.")
 
 
     # Manually initiate calculations.
