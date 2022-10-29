@@ -104,9 +104,9 @@ def attachAnalysis(caller):
 # Generic attach.
 def attachRelation(caller, relationTable):
 
-    import sql_interop as si  # Talk to the database.
-
     # Get information about the relation table.
+    import sql_interop as si
+    # Fetch the meta table.
     tableRefs = si.fetchData(
         caller.sqlConnection
       , si.buildQueryString(
@@ -115,4 +115,5 @@ def attachRelation(caller, relationTable):
         )
     )
 
-    print(tableRefs)
+    import pprint
+    pprint.pprint(tableRefs)
