@@ -207,7 +207,14 @@ class lucentTerminal(cmd.Cmd):
             import pick  # Choose an options from a list.
 
             # Options are all samples.
-            options = sh.getOptions(self.sqlConnection, "sample")
+            try:
+                options = sh.getOptions(self.sqlConnection, "sample")
+            except ValueError:
+                print("List of options came back empty. Are samples available?")
+                return -1
+            except Exception as e:
+                print(f"Other error picking sample, {e}.")
+                return -1
 
             # Execute the picking.
             sample, index = pick.pick(options, _("Please choose a sample to attach analyses to."))
