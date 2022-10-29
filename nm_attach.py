@@ -151,14 +151,14 @@ def attachRelation(caller, relationTable):
     # Have the user pick one.
     try:
         detailTableChoice = pick.pick(
-            masterTableOptions
+            detailTableOptions
           , tableInfo["detail table"]["choice text"]
           , multiselect = True
         )
     except KeyError:  # Choice text is optional.
         detailTableChoice = [t[0] for t in
             pick.pick(
-                masterTableOptions, tableInfo["detail table"], multiselect = True
+                detailTableOptions, tableInfo["detail table"], multiselect = True
             )
         ]
 
