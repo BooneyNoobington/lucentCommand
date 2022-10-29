@@ -168,8 +168,8 @@ def attachRelation(caller, relationTable):
         print(masterEntry)
         for detailEntry in detailTableChoice:
             pkr = si.getPrimaryKey(caller.sqlConnection, relationTable)
-            pkm = si.getPrimaryKey(caller.sqlConnection, masterEntry["table name"])
-            pkd = si.getprimaryKey(caller.sqlConnection, detailEntry["table name"])
+            pkm = si.getPrimaryKey(caller.sqlConnection, masterEntry[0]["table name"])
+            pkd = si.getprimaryKey(caller.sqlConnection, detailEntry[0]["table name"])
 
             keyList = [pkr, pkm, pkd]
 
@@ -181,8 +181,8 @@ def attachRelation(caller, relationTable):
                     )[0]["max"]
                 )
                 # Value for primary key field of master table.
-              , masterEntry[pkm]
-              , detailEntry[pkd]
+              , masterEntry[0][pkm]
+              , detailEntry[0][pkd]
             ]
 
             print(keyList)
