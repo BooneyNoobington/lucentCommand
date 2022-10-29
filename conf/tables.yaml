@@ -1,3 +1,7 @@
 tables:
-    analysis:
-        attach: result
+    table name: analysis
+        relation table: result
+        options for: [sample, analysis]
+        columns:
+            id_result:
+                get by: auto generate

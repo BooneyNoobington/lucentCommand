@@ -198,29 +198,6 @@ CREATE OR REPLACE TABLE `procedure_measurand`
   , calculation VARCHAR(15)  -- TODO: Deprecate.
 );
 
--- Is set up when procedure is defined.
--- Governs which result is derived by which raw value and by which calculation.
-CREATE OR REPLACE TABLE `calculation`
-(
-    -- Auto generated primary key.
-    id_calculation INTEGER PRIMARY KEY UNIQUE NOT NULL
-    -- Values can be calculated in a different way depending on which method of
-    -- measurement was used.
-  , id_procedure INTEGER NOT NULL REFERENCES `procedure` (id_procedure)
-    -- Script file can be any script language which is installed on the server
-    -- and is able to manipulate records in an rdbms.
-  , script_file VARCHAR(250) NOT NULL
-    -- What ends up in the table `result`.
-  , measurand_result INTEGER NOT NULL REFERENCES `measurand` (id_measurand)
-    -- Which input parameters are necessary? If more than one this
-    -- table simply has multiple rows for each "measurand_result" (n to m).
-  , measurand_input INTEGER NOT NULL REFERENCES `measurand` (id_measurand)
-    -- An input can consist of various groups. Like raw values for
-    -- variable a and some other values for variable b.
-    -- The c could be mean(a) - mean(b).
-    -- These groups are defined here.
-  , argument_group INTEGER NOT NULL
-);
 
 -- An analysis is a collection of measurands from one or more procedures.
 CREATE OR REPLACE TABLE `analysis`
@@ -444,15 +421,6 @@ CREATE OR REPLACE TABLE `result`
     -- here, since everything about the procedures can be derived from the analyses.
   , id_analysis INTEGER NOT NULL REFERENCES `analysis` (id_analysis)
   , id_procedure INTEGER NOT NULL REFERENCES `procedure` (id_procedure)
-    -- From wich device comes the result? This is also not known at insert time since
-    -- any procedure can be valid for multiple devices.
-  , id_device INTEGER REFERENCES `device` (id_device)
-    -- Who did the measurement? Not clear on insert time.
-  , id_person INTEGER REFERENCES `person`(id_person)
-    -- When was the measurement aquired? Not clear on insert time.
-  , moment DATETIME
-    -- What was the actual result and which unit has it?
-    -- (Uncertainty is known by method.)
   , value DOUBLE  -- Null until calculated.
   , id_unit INTEGER NOT NULL REFERENCES `unit` (id_unit)  -- Can be overwritten.
     -- Point to a custom script that does the calculation.
