@@ -156,10 +156,13 @@ def attachRelation(caller, relationTable):
             print(f"Primary key not provided for {key}.")
 
         # Add all the primary keys and their values to a dictianory.
-        tmpDict = {}
-        tmpDict["primary key"] = pk
-        tmpDict["values"] = [r[pk] for r in t[1]]
+        # tmpDict = {}
+        # tmpDict["primary key"] = pk
+        # tmpDict["values"] = [r[pk] for r in t[1]]
+        #
+        # keysAndValues[t[0]] = tmpDict
 
-        keysAndValues[t[0]] = tmpDict
+        keysAndValues[pk] = [r[pk] for r in t[1]]
 
+    # Now insert the values into the relation table.
     print(keysAndValues)
