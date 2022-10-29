@@ -149,11 +149,13 @@ class lucentTerminal(cmd.Cmd):
         import nm_attach as na  # Attaching a n to m relation.
 
         # Process the given command line.
-        l = lucent_functions.cliFromStr(line, ["command"])
+        l = lucent_functions.cliFromStr(line, ["command", "table"])
 
         # An analysis is to be attached.
         if l["command"].lower() == "analysis" or l["command"].lower() == "analyses":
             na.attachAnalysis(self)  # Call a function for that specific purpose.
+        elif: l["command"].lower() == "generic":
+            na.attachRelation(l["table"])
 
 
     # Manually initiate calculations.

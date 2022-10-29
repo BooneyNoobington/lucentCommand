@@ -98,3 +98,19 @@ def attachAnalysis(caller):
 
         # Execute the insert.
         si.genericInsert(caller.sqlConnection, "result", listOfKeys, listOfValues, True)
+
+
+
+# Generic attach.
+def attachRelation(caller, relationTable):
+
+    # Get information about the relation table.
+    tableRefs = si.fetchData(
+        caller.sqlConnection
+      , si.buildQueryString(
+            "./sql/GET_TABLE_REFS.SQL"
+          , {"table": relationTable}
+        )
+    )
+
+    print(tableRefs)

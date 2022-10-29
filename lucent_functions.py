@@ -17,9 +17,9 @@ def cliFromStr(line, argumentsList):
     # Initialize empty dictianory for arguments and their values.
     argsAndVals = {}
 
-    # Sanity check.
-    if len(argumentsList) != len(lineAsList):
-        print("Can't interpret command line. Two few or much arguments provided.")
+    # # Sanity check.
+    # if len(argumentsList) != len(lineAsList):
+    #     print("Can't interpret command line. Two few or much arguments provided.")
 
     # Assign every argument its value.
     try:
