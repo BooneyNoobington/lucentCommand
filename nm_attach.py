@@ -119,5 +119,22 @@ def attachRelation(caller, relationTable):
     except KeyError:
         refList = tableInfo["options for"]
 
+    # Have the user choose.
+    import sql_interop as si  # Fetch data, insert records.
+    import pick  # Choose from a list of options.
+    choicesDict = {}  # Initialize empty dict.
 
-    print(refList)
+    # Loop over all references defined in config.
+    for r in refList:
+        opts = si.getOptions(caller.sqlConnection, r["table name"])
+
+        try:
+            rChoices = pick.pick(opts, r["choice text"])
+        except KeyError:  # Choice texts aren't mandatory.
+            rChoices = pick.pick(opts)
+
+        # Add the choice to the respective dict.
+        choicesDict[r["table name"]] = [c[0] for c in rChoices]
+
+    import pprint
+    pprint.pprint(choicesDict)
