@@ -159,9 +159,8 @@ class lucentTerminal(cmd.Cmd):
             try:
                 na.attachRelation(self, l["table"])
             # User didn't provide a table name.
-            except KeyError:
-                print("Please provide a table to insert the relation to.")
-                print(l)
+            except KeyError e:
+                print(f"Please provide a table to insert the relation to. ({e})")
             # Other stuff tat can go wrong.
             except Exception as e:
                 r = l["table"]
