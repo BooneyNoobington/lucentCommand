@@ -177,7 +177,7 @@ def attachRelation(caller, relationTable):
                 # Auto generate running number for relation.
                 n.getNextNumber(
                     si.fetchData(
-                        caller.sqlConnection, f"SELECT MAX({pkr} AS max FROM {relationTable});"
+                        caller.sqlConnection, f"SELECT MAX({pkr}) AS max FROM `{relationTable}`;"
                     )[0]["max"]
                 )
                 # Value for primary key field of master table.
