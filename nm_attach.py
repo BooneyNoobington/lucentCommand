@@ -116,7 +116,7 @@ def attachRelation(caller, relationTable):
     )
 
     # All these columns need to be filled.
-    keyList = si.fetchData(f"SHOW COLUMNS FROM `{relationTable}`;")
+    keyList = si.fetchData(caller.sqlConnection, f"SHOW COLUMNS FROM `{relationTable}`;")
 
     # For every reference to another table an option list needs to be compiled.
     import sql_helpers as sh  # For compiling list of options.
