@@ -154,7 +154,7 @@ class lucentTerminal(cmd.Cmd):
         # An analysis is to be attached.
         if l["command"].lower() == "analysis" or l["command"].lower() == "analyses":
             na.attachAnalysis(self)  # Call a function for that specific purpose.
-        elif: l["command"].lower() == "generic":
+        elif l["command"].lower() == "generic":
             na.attachRelation(l["table"])
 
 
