@@ -170,7 +170,14 @@ def attachRelation(caller, relationTable):
             valueList.append(input(f"Please input a value for field {k}"))
         # Other values where chosen above.
         else:
-            valueList.append(next(item[k] for item in selections if item[k]))
+            # Check the dictianories from the selections.
+            for d in selections:
+                # See if you can find a value to the required key in d.
+                try:
+                    valueList.append(d[k])
+                # If not keep going.
+                except KeyError:
+                    pass
 
     print(valueList)
 
