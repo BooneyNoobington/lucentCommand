@@ -115,5 +115,29 @@ def attachRelation(caller, relationTable):
         )
     )
 
-    import pprint
-    pprint.pprint(tableRefs)
+    # For every reference to another table an option list needs to be compiled.
+    import sql_helpers as sh  # For compiling list of options.
+    import pick  # For having the user pick.
+
+    # Loop over all references.
+    for ref in tableRefs:
+        # Make sure all the keys needed are present.
+        try:
+            refToTable = ref["refToTable"]
+            refToColumn = ref["refToColumn"]
+            referencingColumn = ref["referencingColumn"]
+        except KeyError as e:
+            print(f"Problem in compiling options list for generic attach. Key not found: {e}.")
+
+        # Grab all the options.
+        optionList = sh.getOptions(caller.sqlConnection, refToTable)
+
+        # Have the user pick one.
+        selectionList = pick.pick(
+            optionList
+          , f"Please pick a record from table {refToTable}."
+          , multiselect = True  # TODO: Is this safe?
+        )
+
+        # Remove the tuples.
+        selectionList = [d[0] for d in selectionList]
