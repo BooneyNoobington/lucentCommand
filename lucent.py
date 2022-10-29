@@ -156,6 +156,7 @@ class lucentTerminal(cmd.Cmd):
             na.attachAnalysis(self)  # Call a function for that specific purpose.
         # Generic version.
         elif l["command"].lower() == "generic":
+            print(l)
             try:
                 na.attachRelation(self, l["table"])
             # User didn't provide a table name.
