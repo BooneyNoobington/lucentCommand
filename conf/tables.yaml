@@ -1,7 +1,22 @@
+# This part of the configuration gives information about tables
+# and their relations which cannot be derived from the rdbms directly.
 tables:
+    # Analyses are collections of measurands which can be attached to a sample.
     analysis:
-        relation table: result
-        options for: [sample, analysis]
-        columns:
-            id_result:
-                get by: auto generate
+        # These attachment information will be respected.
+        attach rules:
+            # Put relation information in this table.
+            relation table: result
+            # Present the user with choices for these related tables.
+            options for:
+                -
+                    table name: sample
+                    # Choice text is optional. TODO: Catch by KeyError.
+                    choice text: Please choose one or more sample to attach an analysis to.
+                -
+                    table name: analysis
+                    choice text:
+            # Handle these other columns in a specific way.
+            columns:
+                id_result:
+                    get by: auto generate

@@ -106,7 +106,7 @@ def attachRelation(caller, relationTable):
 
     # Get information about the relation table.
     try:
-        tableInfo = caller.config["tables"][relationTable]
+        tableInfo = caller.config["tables"]["attach rules"][relationTable]
     except KeyError:
         print(f"Import for {relationTable} not configured.")
         return -1
