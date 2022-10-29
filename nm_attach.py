@@ -157,8 +157,8 @@ def attachRelation(caller, relationTable):
 
         # Add all the primary keys and their values to a dictianory.
         tmpDict = {}
-        tmpDict = ["primary key"] = pk
-        tmpDict = [r[pk] for r in t[1]]
+        tmpDict["primary key"] = pk
+        tmpDict["values"] = [r[pk] for r in t[1]]
 
         keysAndValues[t[0]] = tmpDict
 
