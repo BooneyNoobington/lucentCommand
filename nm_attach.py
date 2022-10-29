@@ -140,4 +140,7 @@ def attachRelation(caller, relationTable):
         )
 
         # Remove the tuples.
-        selectionList = [d[0] for d in selectionList]
+        try:
+            selectionList = [d[0] for d in selectionList]
+        except Exception as e:
+            print(f"There removing tuples from selection list, {e}.")
