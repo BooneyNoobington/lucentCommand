@@ -189,13 +189,19 @@ CREATE OR REPLACE TABLE `measurand`
 CREATE OR REPLACE TABLE `procedure_measurand`
 (
     id_procedure_measurand INTEGER PRIMARY KEY UNIQUE NOT NULL
+    -- Which procedure contains which measurands?
   , id_procedure INTEGER NOT NULL REFERENCES `procedure` (id_procedure)
   , id_measurand INTEGER NOT NULL REFERENCES `measurand` (id_measurand)
+    -- Which unit is usually used? Can be overwritten in `result`.
   , id_unit INTEGER NOT NULL REFERENCES `unit` (id_unit)
-  , error DOUBLE NOT NULL
-  , error_class VARCHAR(9) NOT NULL
-  , error_unit INTEGER NOT NULL REFERENCES `unit` (id_unit)
-  , calculation VARCHAR(15)  -- TODO: Deprecate.
+    -- What uncertainty is to be expected?
+  , uncertainty DOUBLE NOT NULL
+    -- Is this a relative or absolute value? (Percentage or actual value?)
+  , uncertainty_class VARCHAR(9) NOT NULL
+    -- In which unit is the uncertainty provided?
+  , uncertainty_unit INTEGER NOT NULL REFERENCES `unit` (id_unit)
+    -- How is the corresponding end result calculated? Points to a (usually r) file.
+  , calculation VARCHAR(35)
 );
 
 
@@ -460,15 +466,16 @@ CREATE OR REPLACE VIEW `readable_result` AS
 ;
 
 
--- Realize "tables" sample_analysis and sample_procedure as views. Performance ?!?
-CREATE OR REPLACE VIEW `sample_analysis` AS
-  SELECT DISTINCT       s.id_sample
-                      , a.id_analysis
-  FROM                  `sample` s
-                  JOIN  `result` r
-                    ON  r.id_sample = s.id_sample
-                  JOIN  `analysis` a
-                    ON  a.id_analysis = r.id_analysis
+-- The totatlity of measurements to be done for a sample is to stored here.
+CREATE OR REPLACE TABLE `sample_analysis`
+(
+    id_sample_analysis INTEGER PRIMARY KEY UNIQUE NOT NULL
+  , id_sample INTEGER NOT NULL REFERENCES `sample` (id_sample)
+  , id_analysis INTEGER NOT NULL REFERENCES `analysis` (id_analysis)
+);
+
+-- The connection between a sample and it's attached procedures is "virtual"
+-- Meaning, realized by a view.
 ;
 
 CREATE OR REPLACE VIEW `sample_procedure` AS

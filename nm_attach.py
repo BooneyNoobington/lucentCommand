@@ -124,21 +124,32 @@ def attachRelation(caller, relationTable):
     import sql_helpers as sh  # SQL-related helpers.
     import pick  # Choose from a list of options.
     choicesDict = {}  # Initialize empty dict.
+    primaryKeys = {}
 
     # Loop over all references defined in config.
     for r in refList:
+        # Collect options for user to choose from.
         opts = sh.getOptions(caller.sqlConnection, r["table name"])
 
         try:
             rChoices = pick.pick(opts, r["choice text"], multiselect = True)
         except KeyError:  # Choice texts aren't mandatory.
             rChoices = pick.pick(opts, multiselect = True)
+        except ValueError:
+            print("Was the list of options empty?")
+            return -1
 
-        # Add the choice to the respective dict.
+        # Add the choice and primary key to the respective dict.
         try:
             choicesDict[r["table name"]] = [c[0] for c in rChoices]
+            primaryKeys = si.getPrimaryKey(caller.sqlConnection, r["table name"])
         except KeyError:
             print(f"Table name not found. Configuration error?")
 
+    # Some database related operations need to be performed.
+    # Collect primary keys for each table.
+
+
     import pprint
     pprint.pprint(choicesDict)
+    pprint.pprint(primaryKeys)

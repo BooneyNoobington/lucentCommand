@@ -34,23 +34,17 @@ def databaseConnection(config):
 
 # Function to determine primary key of table.
 def getPrimaryKey(sqlConnection, table):
-
-    import helpers as h
-
     # Get the id field value for the passed.
     tableInfo = fetchData(
           sqlConnection
-        , "SHOW KEYS FROM `{table}` WHERE Key_name = 'PRIMARY'".format(
-              table = table
-          )
+        , f"SHOW KEYS FROM `{table}` WHERE Key_name = 'PRIMARY'"
     )
 
     # What is the name of the primary key?
     try:
         primaryKey = tableInfo[0]["Column_name"]
     except Exception as e:
-        print("Could not determine the primary key for table: " + table)
-        print(e)
+        print(f"Could not determine the primary key for {table}, {e}")
         return 1   # End function with error 1.
 
     return primaryKey
