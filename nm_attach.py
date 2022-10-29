@@ -165,7 +165,6 @@ def attachRelation(caller, relationTable):
     import numbering as n
 
     for masterEntry in masterTableChoice:
-        print(masterEntry)
         for detailEntry in detailTableChoice:
             pkr = si.getPrimaryKey(caller.sqlConnection, relationTable)
             pkm = si.getPrimaryKey(caller.sqlConnection, tableInfo["master table"]["table name"])
