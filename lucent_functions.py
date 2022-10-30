@@ -182,6 +182,7 @@ def simpleQuery(caller):
     except Exception as e:
         print(_(f"Error while executing {queryFile}, {e}."))
         print(queryFile)
+        return -1
 
     # Tranform dictianories into a readable table.
     try:
