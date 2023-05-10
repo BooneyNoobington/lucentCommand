@@ -2,7 +2,7 @@
 pH.mean <- function(pH.vec){
 
     # Transform log to concentration.
-	concentration <- exp(-(pH.vec)/(log(exp(1))))
+	concentration <- exp(-(pH.vec)/(log(exp(1)))
 
 	# Compute mean. Ingore "not numbers".
 	concentration.mean <- mean(concentration, na.rm = TRUE )
